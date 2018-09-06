@@ -24,7 +24,7 @@ int main(int argc, char const *argv[]) {
 }
 
 void menu(){
-  cout << "\e[38:5:42m----- Bem Vindo ao Gerenciador de Alimentação! -----\n\e[39m";
+  cout << "Bem Vindo ao Gerenciador de Alimentacao! -----\n";
   int opcao;
   do {
     switch (opcao) {
@@ -35,7 +35,7 @@ void menu(){
         cadastro();
         break;
     }
-    cout << "\e[2m\nEscolha uma opção:\e[22m\n\n1 - Realizar Login\n2 - Realizar Cadastro\n3 - Sair\n";
+    cout << "\nEscolha uma opcao:\n\n1 - Realizar Login\n2 - Realizar Cadastro\n3 - Sair\n";
     cin >> opcao;
   } while(opcao != 3);
 
@@ -45,14 +45,14 @@ void menu(){
 }
 
 void login(){
-  cout << "Olá login";
+  cout << "Ola login";
 }
 
 void cadastro(){
 
   Usuario usuario;
 
-  cout << "\e[2m\nIniciando Cadastro\e[22m";
+  cout << "\nIniciando Cadastro";
   cout << "\nUsername: ";
   cin >> usuario.nome;
   cout << "\nPassword: ";
@@ -61,20 +61,20 @@ void cadastro(){
 
   coletarInformacoes(usuario);
 
-  cout << "Cadastro Realizado com sucesso!!!\n";
+  cout << "\nCadastro Realizado com sucesso!!!\n";
 }
 
 void coletarInformacoes(Usuario usuario){
 
-  cout << "\e[2m\nSobre Você\e[22m\n";
+  cout << "\nSobre Voce\n";
   cout << "Nome: \n";
   cout << "Idade: \n";
   cout << "Peso (Kg): \n";
   cout << "Altura (Cm): \n";
-  cout << "Circunferência Abdominal (Cm): \n";
+  cout << "Circunferencia Abdominal (Cm): \n";
   cout << "Quadril (Cm): \n";
 
-  cout << "\e[2m\nSelecione a dieta desejada:\e[22m";
+  cout << "\nSelecione a dieta desejada:";
   cout << "\n\n(1) Ganho de massa muscular";
   cout << "\n(2) Emagrecimento";
   cout << "\n(3) Dieta dos pontos\n";
@@ -88,6 +88,6 @@ void coletarInformacoes(Usuario usuario){
   } else if (dietaEscolhida == 3) {
     usuario.td = tiposDieta::dieta_dos_pontos;
   } else {
-    cout << "\nDieta não existente no momento.\n";
+    cout << "\nDieta nao existente no momento.\n";
   }
 }
