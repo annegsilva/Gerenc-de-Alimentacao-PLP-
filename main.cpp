@@ -20,30 +20,30 @@ struct Usuario {
   tipos_dieta td;
 };
 
-Usuario usuarios[100];
+void cadastro();
+void menu(Usuario usuarios[]);
+void lerUsuarios(Usuario usuarios[]);
+void addUsuario(Usuario usuarios[],vector<string> saida);
+void salvarUsuario(string usuario);
+bool login(Usuario usuarios[]);
+void split(string str, char delimiter,vector<string> saida);
+
 int num_usuarios = 0;
 
-void cadastro();
-bool login();
-void menu();
-void lerUsuarios();
-vector<string> split(string str, char delimiter);
-void mostrarUsuarios();
-
 int main(int argc, char const *argv[]) {
-  menu();
+  Usuario usuarios[100];
+  menu(usuarios);
   return 0;
 }
 
-void menu(){
-  lerUsuarios();
-  mostrarUsuarios();
+void menu(Usuario usuarios[]){
+  lerUsuarios(usuarios);
   cout << "Bem Vindo ao Gerenciador de Alimentacao! -----\n";
   int opcao;
   do {
     switch (opcao) {
       case 1:
-      login();
+      login(usuarios);
       break;
       case 2:
       cadastro();
@@ -56,7 +56,7 @@ void menu(){
 
 }
 
-bool login(){
+bool login(Usuario usuarios[]){
   string username;
   string senha;
   int i;
@@ -66,7 +66,7 @@ bool login(){
   cout << "\nSenha: ";
   cin >> senha;
 
-  for (i = 0; i < 99; i++) {
+  for (i = 0; i < num_usuarios; i++) {
     if(usuarios[i].username == username && usuarios[i].senha == senha){
       cout << "encontrei o usuario e estou logaado";
       return true;
@@ -77,52 +77,47 @@ bool login(){
 
 void cadastro(){
 
-  Usuario usuario;
-
+  string usuario[9];
   cout << "\nIniciando Cadastro";
   cout << "\nUsername: ";
-  cin >> usuario.username;
+  cin >> usuario[0];
   cout << "\nPassword: ";
-  cin >> usuario.senha;
+  cin >> usuario[1];
 
-  cout << "\nSobre Voce\n";
-  cout << "Nome: ";
-  cin >> usuario.nome;
+  cout << "\nSobre Voce";
+  cout << "\nNome: ";
+  cin >> usuario[2];
   cout << "\nIdade: ";
-  cin >> usuario.idade;
+  cin >> usuario[3];
   cout << "\nPeso (Kg): ";
-  cin >> usuario.peso;
+  cin >> usuario[4];
   cout << "\nAltura (Cm): ";
-  cin >> usuario.altura;
+  cin >> usuario[5];
   cout << "\nCircunferencia Abdominal (Cm): ";
-  cin >> usuario.circunferencia_abdominal;
+  cin >> usuario[6];
   cout << "\nQuadril (Cm): ";
-  cin >> usuario.quadril;
+  cin >> usuario[7];
 
   cout << "\nSelecione a dieta desejada:";
   cout << "\n\n(1) Ganho de massa muscular";
   cout << "\n(2) Emagrecimento";
   cout << "\n(3) Dieta dos pontos\n";
-  int dietaEscolhida;
-  cin >> dietaEscolhida;
+  cin >> usuario[8];
 
-  if (dietaEscolhida == 1){
-    usuario.td = tipos_dieta::ganho_de_massa;
-  } else if (dietaEscolhida == 2){
-    usuario.td = tipos_dieta::emagrecimento;
-  } else if (dietaEscolhida == 3) {
-    usuario.td = tipos_dieta::dieta_dos_pontos;
-  } else {
-    cout << "\nDieta nao existente no momento.\n";
+  string usuario_g;
+  int i;
+  for (i = 0; i < 9; i++) {
+    usuario_g += usuario[i] + ';';
   }
 
-  cout << "\nCadastro Realizado com sucesso!!!\n";
-  usuarios[num_usuarios] = usuario;
+  salvarUsuario(usuario_g);
 
-  num_usuarios ++;
+  cout << "\nCadastro Realizado com sucesso!!!\n";
 }
 
-void lerUsuarios () {
+// Daqui pra baixo eh tudo arquivo
+
+void lerUsuarios (Usuario usuarios[]) {
   string line;
   ifstream myfile ("usuarios.txt");
   if (myfile.is_open())
@@ -130,18 +125,10 @@ void lerUsuarios () {
     while (! myfile.eof() )
     {
       getline (myfile,line);
-      vector<string> saida = split(line,';');
+      vector<string> saida;
+      split(line,';', saida);
 
-      Usuario usuario;
-      usuario.username = saida[0];
-      usuario.senha = saida[1];
-      usuario.nome = saida[2];
-      usuario.idade = stoi(saida[3]);
-      usuario.altura = stof(saida[4]);
-      usuario.circunferencia_abdominal = stof(saida[5]);
-      usuario.quadril = stof(saida[6]);
-      usuarios[num_usuarios] = usuario; // usuario adicionado
-      num_usuarios ++;
+      addUsuario(usuarios,saida);
     }
     myfile.close();
   }
@@ -150,24 +137,33 @@ void lerUsuarios () {
 
 }
 
-void mostrarUsuarios(){
-  int i;
-  for (i = 0; i < 99; i++) {
-    cout << usuarios[i].username; // aqui nao existe mais usuario, algum problema com apontador
-    cout << usuarios[i].senha;
-    cout << usuarios[i].nome;
-    cout << "\n";
-  }
+void addUsuario(Usuario usuarios[], vector<string> saida){
+  Usuario usuario;
 }
 
-vector<string> split(string str, char delimiter) {
-  vector<string> internal;
+void salvarUsuario (string usuario) {
+  std::ofstream Hypnos_FILE;
+  Hypnos_FILE.open("usuarios.txt", std::ios::app);
+  if (Hypnos_FILE.is_open())
+  {
+    Hypnos_FILE << usuario << endl;
+  }
+  else
+     std::cout << "Erro ao abrir arquivo de texto.";
+  Hypnos_FILE.close();
+}
+
+void split(string str, char delimiter, vector<string> internal) {
+  Usuario usuario;
   stringstream ss(str);
   string tok;
-
   while(getline(ss, tok, delimiter)) {
     internal.push_back(tok);
   }
 
-  return internal;
+  int i;
+  for (i = 0; i < internal.size(); i++) {
+    usuario.username = internal.at(0);
+  }
+
 }
