@@ -23,10 +23,9 @@ struct Usuario {
 void cadastro();
 void menu(Usuario usuarios[]);
 void lerUsuarios(Usuario usuarios[]);
-void addUsuario(Usuario usuarios[],vector<string> saida);
 void salvarUsuario(string usuario);
 bool login(Usuario usuarios[]);
-void split(string str, char delimiter,vector<string> saida);
+const vector<string> explode(const string& s, const char& c);
 
 int num_usuarios = 0;
 
@@ -36,8 +35,16 @@ int main(int argc, char const *argv[]) {
   return 0;
 }
 
+mostrarUsuarios(Usuario usuarios[]){
+  int i;
+  for (i = 0; i < num_usuarios; i++) {
+    cout << usuarios[i].username << endl;
+  }
+}
+
 void menu(Usuario usuarios[]){
   lerUsuarios(usuarios);
+  mostrarUsuarios(usuarios);
   cout << "Bem Vindo ao Gerenciador de Alimentacao! -----\n";
   int opcao;
   do {
@@ -109,7 +116,7 @@ void cadastro(){
   for (i = 0; i < 9; i++) {
     usuario_g += usuario[i] + ';';
   }
-
+  usuario_g += "fim";
   salvarUsuario(usuario_g);
 
   cout << "\nCadastro Realizado com sucesso!!!\n";
@@ -122,23 +129,27 @@ void lerUsuarios (Usuario usuarios[]) {
   ifstream myfile ("usuarios.txt");
   if (myfile.is_open())
   {
-    while (! myfile.eof() )
+    int count;
+    while (! myfile.eof())
     {
-      getline (myfile,line);
-      vector<string> saida;
-      split(line,';', saida);
-
-      addUsuario(usuarios,saida);
+      count = 0;
+      getline(myfile,line);
+      vector<string> usuario{explode(line, ';')};
+      for(auto n:usuario){
+        if(n != "fim" ) {
+          usuario[count] = n;
+          count++;
+        }
+      }
+      Usuario novoUsuario;
+      novoUsuario.username = usuario[0];
+      novoUsuario.senha = usuario[1];
+      novoUsuario.nome = usuario[2];
+      usuarios[num_usuarios] = novoUsuario;
+      num_usuarios ++;
     }
     myfile.close();
-  }
-
-  else cout << "arquivo nao existe";
-
-}
-
-void addUsuario(Usuario usuarios[], vector<string> saida){
-  Usuario usuario;
+  } else cout << "arquivo nao existe";
 }
 
 void salvarUsuario (string usuario) {
@@ -146,24 +157,24 @@ void salvarUsuario (string usuario) {
   Hypnos_FILE.open("usuarios.txt", std::ios::app);
   if (Hypnos_FILE.is_open())
   {
-    Hypnos_FILE << usuario << endl;
+    Hypnos_FILE << endl << usuario;
   }
   else
-     std::cout << "Erro ao abrir arquivo de texto.";
+  std::cout << "Erro ao abrir arquivo de texto.";
   Hypnos_FILE.close();
 }
 
-void split(string str, char delimiter, vector<string> internal) {
-  Usuario usuario;
-  stringstream ss(str);
-  string tok;
-  while(getline(ss, tok, delimiter)) {
-    internal.push_back(tok);
-  }
+const vector<string> explode(const string& s, const char& c)
+{
+  string buff{""};
+  vector<string> v;
 
-  int i;
-  for (i = 0; i < internal.size(); i++) {
-    usuario.username = internal.at(0);
+  for(auto n:s)
+  {
+    if(n != c) buff+=n; else
+    if(n == c && buff != "") { v.push_back(buff); buff = ""; }
   }
+  if(buff != "") v.push_back(buff);
 
+  return v;
 }
