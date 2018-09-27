@@ -24,7 +24,39 @@ struct Usuario {
 	int index;
 	// matriz que salva em tres colunas 1: data, 2: imc, 3: rcq.
 	float indices[10][3];
+	// vetor que salva a porc de nutriente por refeição i
+	float proteina [5];
+	float carb[5];
+	float gordura[5];
+	float pontos[5];
 };
+//Funcionalidade 2
+
+void proteina_tipo1(Usuario user, float proteina, int refeicao){
+	float peso = user.peso[user.index - 1];
+	user.proteina[refeicao] = proteina;
+	float prot_total;
+	for(int i = 0; i < 5; i++){
+		prot_total += user.proteina[i];
+	}
+	float limite = (2 * peso) - prot_total;
+	if(proteina >= (1.4 * peso)/5 && proteina <= (2 * peso)/5){
+		cout << "Sua refeição tem a quantidade: IDEAL DE PROTEÍNA !" << endl;
+	}
+	
+	if(proteina > (1.4 * peso)/5){
+		cout << "Sua refeição tem a quantidade: MENOR QUE A IDEAL DE PROTEÍNA!" << endl;
+	}
+	
+	if(proteina >(2 * peso)/5){
+		cout << "Sua refeição tem a quantidade: SUPERIOR QUE A NECESSÁRIA DE PROTEÍNA!" << endl;
+		cout << "Lembre-se que o nosso corpo tem um limite máximo de absorção" << endl;
+	}
+	cout << "Tente consumir em média " << (2 * peso)/5 << " gramas de proteína por refeição." << endl;
+	cout << "Seu limite de proteinas no dia é " << limite << "gramas." << endl;
+
+}
+
 
 //Funcionalidade 3
 float calculaIMC(Usuario user, int pos)
