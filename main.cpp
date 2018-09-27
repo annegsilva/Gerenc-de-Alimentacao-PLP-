@@ -42,26 +42,27 @@ int main(int argc, char const *argv[]) {
 // Metodo inicial. menu
 void menu(Usuario usuarios[]) {
 	lerUsuarios(usuarios);
-	cout << "Bem Vindo ao Gerenciador de Alimentacao! -----\n";
-	int opcao;
+	cout << WELCOME;
+	
+	int option;
 
 	do {
-		switch (opcao) {
+		switch (option) {
 			case 1:
-			login(usuarios);
-			break;
+				login(usuarios);
+				break;
 
 			case 2:
-			cadastro();
-			break;
+				cadastro();
+				break;
+			
+			default:
+				cout << ERROR;
 		}
 	lerUsuarios(usuarios);
-	cout << "\nEscolha uma opcao:";
-	cout << "\n1 - Realizar Login";
-	cout << "\n2 - Realizar Cadastro";
-	cout << "\n3 - Sair\n\n";
-	cin >> opcao;
-	} while (opcao != 3);
+	initialMenu();
+	cin >> option;
+	} while (option != 3);
 }
 
 
@@ -70,9 +71,9 @@ void login(Usuario usuarios[]) {
 	string senha;
 	int i;
 
-	cout << "\nUsername: ";
+	cout << USERNAME;
 	cin >> username;
-	cout << "\nSenha: ";
+	cout << PASSWORD;
 	cin >> senha;
 	
 	for (i = 0; i < num_usuarios; i++) {
@@ -90,31 +91,28 @@ void login(Usuario usuarios[]) {
 void cadastro() {
 
 	string usuario[9];
-	cout << "\nIniciando Cadastro";
-	cout << "\nUsername: ";
+	cout << REGISTERING;
+	cout << USERNAME;
 	cin >> usuario[0];
-	cout << "\nPassword: ";
+	cout << PASSWORD;
 	cin >> usuario[1];
 
-	cout << "\nSobre Voce";
-	cout << "\nNome: ";
+	cout << ABOUT_YOU;
+	cout << NAME;
 	getline(cin.ignore(),usuario[2]);
-	cout << "\nIdade: ";
+	cout << AGE;
 	cin >> usuario[3];
-	cout << "\nPeso (kg): ";
+	cout << WEIGHT;
 	cin >> usuario[4];
-	cout << "\nAltura (cm): ";
+	cout << HEIGHT;
 	cin >> usuario[5];
-	cout << "\nCircunferencia Abdominal (cm): ";
+	cout << CIRCUMF;
 	cin >> usuario[6];
-	cout << "\nQuadril (cm): ";
+	cout << HIP;
 	cin >> usuario[7];
 
-	cout << "\nSelecione a dieta desejada:";
-	cout << "\n\n(1) Ganho de massa muscular";
-	cout << "\n(2) Emagrecimento";
-	cout << "\n(3) Dieta dos pontos\n";
-	cin >> usuario[8];
+	dietsMenu();
+	cin >> usuario[8]; // pode dar erro aq
 
 	/*
 	Ao cadastrar cria string pronta para ser salva diretamente no arquivo
@@ -127,7 +125,7 @@ void cadastro() {
 	usuario_g += "fim";
 	salvarUsuario(usuario_g);
 
-	cout << "\nCadastro Realizado com sucesso!!!\n";
+	cout << REGISTERED;
 }
 
 // Leitura dos usuarios gravados em usuarios.txt

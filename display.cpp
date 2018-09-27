@@ -2,7 +2,8 @@
 
 using namespace std;
 
-# define REGISTER "-----  Iniciando Cadastro  -----" << endl << endl;
+# define WELCOME "-----  Bem Vindo ao Gerenciador de Alimentacao! -----";
+# define REGISTERING "-----  Iniciando Cadastro  -----" << endl << endl;
 # define ABOUT_YOU endl << "-----  Sobre Voce  -----" << endl;
 # define DIET_MENU1 "Informe a quantidade dos seguintes nutrientes em gramas (g): " << endl;
 # define DIET_MENU2 "Informe a quantidade de pontos da sua refeição: " << endl;
@@ -23,7 +24,6 @@ using namespace std;
 
 
 void initialMenu() {
-	cout << "-----  Bem Vindo ao Gerenciador de Alimentacao! -----" << endl;
 	cout << "Escolha uma opcao: " << endl;
 	cout << "(1) Fazer Login" << endl;
 	cout << "(2) Realizar Cadastro" << endl;
