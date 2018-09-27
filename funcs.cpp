@@ -295,7 +295,7 @@ int main()
     user2.altura = 1.6;
     user2.atualizarMedidas(27.09,54.5,0.7,1.0);
     user2.proteina_tipo2(28.2, 1);
-	user2.carboidrato_tipo2(15.5,1);
+user2.carboidrato_tipo2(15.5,1);
 
 //Teste da dieta tipo 3
 	Usuario user3;
