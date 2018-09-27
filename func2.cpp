@@ -68,18 +68,18 @@ struct Usuario {
 			cout << "Muito bem! A quantidade de proteínas, carboidratos e gorduras estão adequados.";
 		}
 		
-		else if (gorduras > 22.2){
-			cout << "Olá! É necessário diminuir a quantidade de gorduras (no máximo 22.2 gramas por dia) para um melhor resultado.";
+		if (gorduras > 22.2){
+			cout << "É necessário diminuir a quantidade de gorduras (no máximo 22.2 gramas por dia) para um melhor resultado.";
 		}
 		
-		else if (carboidrato < 150){
-			cout << "Olá! É necessário aumentar a quantidade de carboidratos (no mínimo 150 gramas por dia) para um melhor resultado.";
+		if (carboidrato < 150){
+			cout << "É necessário aumentar a quantidade de carboidratos (no mínimo 150 gramas por dia) para um melhor resultado.";
 		}	
-		else if (proteina > 2){
-			cout << "Olá! É necessário diminuir a quantidade de proteínas (no máximo 2 gramas por dia) para um melhor resultado.";
+		if (proteina > 2){
+			cout << "É necessário diminuir a quantidade de proteínas (no máximo 2 gramas por dia) para um melhor resultado.";
 		}
-		else if (proteina < 1.4){
-			cout << "Olá! É necessário aumentar a quantidade de proteínas (no mínimo 1.4 gramas por dia) para um melhor resultado.";
+		if (proteina < 1.4){
+			cout << "É necessário aumentar a quantidade de proteínas (no mínimo 1.4 gramas por dia) para um melhor resultado.";
 		}
 	}
 	
@@ -89,24 +89,21 @@ struct Usuario {
 		
 		}
 		
-		else if (gorduras > 22.2){
-			cout << "Olá! É necessário diminuir a quantidade de gorduras (no máximo 22.2 gramas por dia) para um melhor resultado.";
+		if (gorduras > 22.2){
+			cout << "É necessário diminuir a quantidade de gorduras (no máximo 22.2 gramas por dia) para um melhor resultado.";
 		}
 		
-		else if (carboidrato < 100){
-			cout << "Olá! É necessário aumentar a quantidade de carboidratos (no mínimo 100 gramas por dia) para um melhor resultado.";
+		if (carboidrato < 100){
+			cout << "É necessário aumentar a quantidade de carboidratos (no mínimo 100 gramas por dia) para um melhor resultado.";
 		}	
-		else if (proteina > 1.4){
-			cout << "Olá! É necessário diminuir a quantidade de proteínas (no máximo 1.4 gramas por dia) para um melhor resultado.";
+		if (proteina > 1.4){
+			cout << "É necessário diminuir a quantidade de proteínas (no máximo 1.4 gramas por dia) para um melhor resultado.";
 
 		}
-		else if (proteina < 0.8){
-			cout << "Olá! É necessário aumentar a quantidade de proteínas (no mínimo 0.8 gramas por dia) para um melhor resultado.";
+		if (proteina < 0.8){
+			cout << "É necessário aumentar a quantidade de proteínas (no mínimo 0.8 gramas por dia) para um melhor resultado.";
 		}
 		
-		
-		
-		cout << "sua dieta esta y \n";
 	}
 	
 	void retorno3(int &pontos){
