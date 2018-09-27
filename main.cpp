@@ -1,173 +1,223 @@
-#include <iostream>
-#include <string>
-#include <vector>
-#include <iomanip>
-#include <fstream>
+# include <iostream>
+# include <string>
+# include <vector>
+# include <iomanip>
+# include <fstream>
+# include <sstream> 
+# include "display.cpp"
 
 using namespace std;
 
 enum tipos_dieta { ganho_de_massa, emagrecimento, dieta_dos_pontos };
 
 struct Usuario {
-  string username;
-  string senha;
-  string nome;
-  int idade;
-  float peso;
-  float altura;
-  float circunferencia_abdominal;
-  float quadril;
-  tipos_dieta td;
+	string username;
+	string senha;
+	string nome;
+	int idade;
+	float peso;
+	float altura;
+	float circunferencia_abdominal;
+	float quadril;
+	tipos_dieta td;
 };
 
-Usuario usuarios[100];
+// Lista dos metodos do gerenciador
+void cadastro();
+void menu(Usuario usuarios[]);
+void lerUsuarios(Usuario usuarios[]);
+void salvarUsuario(string usuario);
+void login(Usuario usuarios[]);
+void mostrarUsuarios(Usuario usuarios[]);
+const vector<string> explode(const string& s, const char& c);
+
 int num_usuarios = 0;
 
-void cadastro();
-bool login();
-void menu();
-void lerUsuarios();
-vector<string> split(string str, char delimiter);
-void mostrarUsuarios();
-
 int main(int argc, char const *argv[]) {
-  menu();
-  return 0;
+	Usuario usuarios[100];
+	menu(usuarios);
+	return 0;
 }
 
-void menu(){
-  lerUsuarios();
-  mostrarUsuarios();
-  cout << "Bem Vindo ao Gerenciador de Alimentacao! -----\n";
-  int opcao;
-  do {
-    switch (opcao) {
-      case 1:
-      login();
-      break;
-      case 2:
-      cadastro();
-      break;
-    }
-    cout << "\nEscolha uma opcao:\n\n1 - Realizar Login\n2 - Realizar Cadastro\n3 - Sair\n";
-    cin >> opcao;
-  } while(opcao != 3);
+// Metodo inicial. menu
+void menu(Usuario usuarios[]) {
+	lerUsuarios(usuarios);
+	cout << WELCOME;
+	
+	int option;
 
+	do {
+		initialMenu();
+		cin >> option;
+		switch (option) {
+			case 1:
+				login(usuarios);
+				break;
 
+			case 2:
+				cadastro();
+				break;
+			
+			default:
+				cout << ERROR;
+		}
+	lerUsuarios(usuarios);
+
+	} while (option != 3);
 }
 
-bool login(){
-  string username;
-  string senha;
-  int i;
 
-  cout << "\nUsername: ";
-  cin >> username;
-  cout << "\nSenha: ";
-  cin >> senha;
+void login(Usuario usuarios[]) {
+	string username;
+	string senha;
+	int i;
 
-  for (i = 0; i < 99; i++) {
-    if(usuarios[i].username == username && usuarios[i].senha == senha){
-      cout << "encontrei o usuario e estou logaado";
-      return true;
-    }
-  }
-  return false;
+	cout << USERNAME;
+	cin >> username;
+	cout << PASSWORD;
+	cin >> senha;
+	
+	for (i = 0; i < num_usuarios; i++) {
+		if (usuarios[i].username == username && usuarios[i].senha == senha) {
+			cout << "encontrei o usuario e estou logado";
+		}
+	}
+
+	// abaixo fluxo de execucao após logar ???
+	// funcionalidades 2 e 3
 }
 
-void cadastro(){
 
-  Usuario usuario;
+// menu de cadastro: coleta inicial de todas as informações do mesmo
+void cadastro() {
 
-  cout << "\nIniciando Cadastro";
-  cout << "\nUsername: ";
-  cin >> usuario.username;
-  cout << "\nPassword: ";
-  cin >> usuario.senha;
+	string usuario[9];
+	cout << REGISTERING;
+	cout << USERNAME;
+	cin >> usuario[0];
+	cout << PASSWORD;
+	cin >> usuario[1];
 
-  cout << "\nSobre Voce\n";
-  cout << "Nome: ";
-  cin >> usuario.nome;
-  cout << "\nIdade: ";
-  cin >> usuario.idade;
-  cout << "\nPeso (Kg): ";
-  cin >> usuario.peso;
-  cout << "\nAltura (Cm): ";
-  cin >> usuario.altura;
-  cout << "\nCircunferencia Abdominal (Cm): ";
-  cin >> usuario.circunferencia_abdominal;
-  cout << "\nQuadril (Cm): ";
-  cin >> usuario.quadril;
+	cout << ABOUT_YOU;
+	cout << NAME;
+	getline(cin.ignore(),usuario[2]);
+	cout << AGE;
+	cin >> usuario[3];
+	cout << WEIGHT;
+	cin >> usuario[4];
+	cout << HEIGHT;
+	cin >> usuario[5];
+	cout << CIRCUMF;
+	cin >> usuario[6];
+	cout << HIP;
+	cin >> usuario[7];
 
-  cout << "\nSelecione a dieta desejada:";
-  cout << "\n\n(1) Ganho de massa muscular";
-  cout << "\n(2) Emagrecimento";
-  cout << "\n(3) Dieta dos pontos\n";
-  int dietaEscolhida;
-  cin >> dietaEscolhida;
+	dietsMenu();
+	cin >> usuario[8]; // pode dar erro aq
 
-  if (dietaEscolhida == 1){
-    usuario.td = tipos_dieta::ganho_de_massa;
-  } else if (dietaEscolhida == 2){
-    usuario.td = tipos_dieta::emagrecimento;
-  } else if (dietaEscolhida == 3) {
-    usuario.td = tipos_dieta::dieta_dos_pontos;
-  } else {
-    cout << "\nDieta nao existente no momento.\n";
-  }
+	/*
+	Ao cadastrar cria string pronta para ser salva diretamente no arquivo
+	*/
+	string usuario_g;
+	int i;
+	for (i = 0; i < 9; i++) {
+		usuario_g += usuario[i] + ';';
+	}
+	usuario_g += "fim";
+	salvarUsuario(usuario_g);
 
-  cout << "\nCadastro Realizado com sucesso!!!\n";
-  usuarios[num_usuarios] = usuario;
-
-  num_usuarios ++;
+	cout << REGISTERED;
 }
 
-void lerUsuarios () {
-  string line;
-  ifstream myfile ("usuarios.txt");
-  if (myfile.is_open())
-  {
-    while (! myfile.eof() )
-    {
-      getline (myfile,line);
-      vector<string> saida = split(line,';');
+// Leitura dos usuarios gravados em usuarios.txt
+void lerUsuarios(Usuario usuarios[]) {
+	string line;
+	ifstream myfile ("usuarios.txt");
 
-      Usuario usuario;
-      usuario.username = saida[0];
-      usuario.senha = saida[1];
-      usuario.nome = saida[2];
-      usuario.idade = stoi(saida[3]);
-      usuario.altura = stof(saida[4]);
-      usuario.circunferencia_abdominal = stof(saida[5]);
-      usuario.quadril = stof(saida[6]);
-      usuarios[num_usuarios] = usuario; // usuario adicionado
-      num_usuarios ++;
-    }
-    myfile.close();
-  }
+	if (myfile.is_open()) {
+		
+		int count;
+		while (!myfile.eof()) {
+			count = 0;
+			getline(myfile,line);
+			vector<string> usuario{explode(line, ';')};
 
-  else cout << "arquivo nao existe";
+			for (auto n:usuario) {
+				if (n != "fim") {
+					usuario[count] = n;
+					count++;
+				}
+			}
 
+			/*
+			Cria novo usuario e o adiciona no fluxo de execução do programa
+			*/
+			Usuario novoUsuario;
+			novoUsuario.username = usuario[0];
+			novoUsuario.senha = usuario[1];
+			novoUsuario.nome = usuario[2];
+			int idade = 0;
+			stringstream converter(usuario[3]); 
+			converter >> idade;
+			novoUsuario.idade = idade;
+			novoUsuario.peso = strtof((usuario[4]).c_str(),0);
+			novoUsuario.altura = strtof((usuario[5]).c_str(),0);
+			novoUsuario.circunferencia_abdominal = strtof((usuario[6]).c_str(),0);
+			novoUsuario.quadril = strtof((usuario[7]).c_str(),0);
+			
+			if(usuario[8] == "1"){
+				novoUsuario.td = tipos_dieta::ganho_de_massa;
+			} else if(usuario[8] == "2"){
+				novoUsuario.td = tipos_dieta::emagrecimento;
+			} else if(usuario[8] == "3"){
+				novoUsuario.td = tipos_dieta::dieta_dos_pontos;
+			}
+			
+			usuarios[num_usuarios] = novoUsuario;
+			num_usuarios ++;
+		}
+		myfile.close();
+	} else {
+		cout << "arquivo nao existe";
+	}
 }
 
-void mostrarUsuarios(){
-  int i;
-  for (i = 0; i < 99; i++) {
-    cout << usuarios[i].username; // aqui nao existe mais usuario, algum problema com apontador
-    cout << usuarios[i].senha;
-    cout << usuarios[i].nome;
-    cout << "\n";
-  }
+// Salva usuario em usuarios.txt
+void salvarUsuario(string usuario) {
+	std::ofstream Hypnos_FILE;
+	Hypnos_FILE.open("usuarios.txt", std::ios::app);
+
+	if (Hypnos_FILE.is_open()) {
+		Hypnos_FILE << endl << usuario;
+	} else {
+		std::cout << "Erro ao abrir arquivo de texto.";
+		Hypnos_FILE.close();
+	}
 }
 
-vector<string> split(string str, char delimiter) {
-  vector<string> internal;
-  stringstream ss(str);
-  string tok;
+// Split para auxiliar na quebra de tokens da entrada (arquivo)
+const vector<string> explode(const string& s, const char& c) {
+	string buff{""};
+	vector<string> v;
 
-  while(getline(ss, tok, delimiter)) {
-    internal.push_back(tok);
-  }
+	for(auto n:s){
+		if (n != c)
+			buff+=n;
+		else if (n == c && buff != "") {
+			v.push_back(buff);
+			buff = "";
+		}
+	}
 
-  return internal;
+	if (buff != "")
+		v.push_back(buff);
+
+	return v;
+}
+
+void mostrarUsuarios(Usuario usuarios[]) {
+	int i;
+	for (i = 0; i < num_usuarios; i++) {
+		cout << usuarios[i].idade << endl;
+	}
 }
