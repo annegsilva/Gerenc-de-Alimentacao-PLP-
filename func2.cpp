@@ -1,4 +1,5 @@
 # include <iostream>
+# include "display.cpp"
 
 using namespace std;
 
@@ -24,89 +25,81 @@ struct Usuario {
 	void tipoDieta() {
 		if (td == ganho_de_massa) {
 			menu1();
-		} else if(td == emagrecimento){
+		} else if (td == emagrecimento) {
 			menu2();
-		}else{
+		} else {
 			menu3();
 		}
 	}
 	
 	void menu1() {
-		cout << "Informe a quantidade dos seguintes nutrientes em gramas (g): \n";
-		cout << "Proteína: ";
+		cout << DIET_MENU1;
+		cout << PROTEIN;
 		cin >> proteina;
-		cout << "Carboidrato: ";
+		cout << CARBO;
 		cin >> carboidrato;
-		cout << "Gorduras: ";
+		cout << FATS;
 		cin >> gorduras;
 
-		
 		retorno1(proteina, carboidrato, gorduras);
 	}
 	
-	void menu2(){
-		cout << "Informe a quantidade dos seguintes nutrientes em gramas (g): \n";
-		cout << "Proteína: ";
+	void menu2() {
+		cout << DIET_MENU1;
+		cout << PROTEIN;
 		cin >> proteina;
-		cout << "Carboidrato: ";
+		cout << CARBO;
 		cin >> carboidrato;
-		cout << "Gorduras: ";
+		cout << FATS;
 		cin >> gorduras;
 		
 		retorno2(proteina, carboidrato, gorduras);
 	}
 	
 	void menu3() {
-		cout << "Informe a quantidade de pontos da sua refeição: ";
+		cout << DIET_MENU2;
 		cin >> pontos;
 		
 		retorno3(pontos);
 	}
 	
 	void retorno1(float &proteina, float &carboidrato, float &gorduras) {
-		if((proteina >= 1.4 && proteina <= 2) && carboidrato >= 150 && gorduras <= 22.2){
-			cout << "Muito bem! A quantidade de proteínas, carboidratos e gorduras estão adequados.";
+		if ((proteina >= 1.4 && proteina <= 2) && carboidrato >= 150 && gorduras <= 22.2) {
+			cout << ADEQUATE;
 		}
-		
-		if (gorduras > 22.2){
-			cout << "É necessário diminuir a quantidade de gorduras (no máximo 22.2 gramas por dia) para um melhor resultado.";
+		if (gorduras > 22.2) {
+			cout << LESS22;
 		}
-		
-		if (carboidrato < 150){
-			cout << "É necessário aumentar a quantidade de carboidratos (no mínimo 150 gramas por dia) para um melhor resultado.";
+		if (carboidrato < 150) {
+			cout << PLUS150;
 		}	
-		if (proteina > 2){
-			cout << "É necessário diminuir a quantidade de proteínas (no máximo 2 gramas por dia) para um melhor resultado.";
+		if (proteina > 2) {
+			cout << LESS2;
 		}
-		if (proteina < 1.4){
-			cout << "É necessário aumentar a quantidade de proteínas (no mínimo 1.4 gramas por dia) para um melhor resultado.";
+		if (proteina < 1.4) {
+			cout << PLUS14;
 		}
 	}
 	
 	void retorno2(float &proteina, float &carboidrato, float &gorduras) {
-		if((proteina >= 0.8 && proteina <= 1.4) && carboidrato >= 100 && gorduras <= 22.2){
-			"Muito bem! A quantidade de proteínas, carboidratos e gorduras estão adequados.";
-		
+		if ((proteina >= 0.8 && proteina <= 1.4) && carboidrato >= 100 && gorduras <= 22.2) {
+			cout << ADEQUATE;
 		}
-		
-		if (gorduras > 22.2){
-			cout << "É necessário diminuir a quantidade de gorduras (no máximo 22.2 gramas por dia) para um melhor resultado.";
+		if (gorduras > 22.2) {
+			cout << LESS22;
 		}
-		
-		if (carboidrato < 100){
-			cout << "É necessário aumentar a quantidade de carboidratos (no mínimo 100 gramas por dia) para um melhor resultado.";
+		if (carboidrato < 100) {
+			cout << PLUS100;
 		}	
-		if (proteina > 1.4){
-			cout << "É necessário diminuir a quantidade de proteínas (no máximo 1.4 gramas por dia) para um melhor resultado.";
-
+		if (proteina > 1.4) {
+			cout << LESS14;
 		}
-		if (proteina < 0.8){
-			cout << "É necessário aumentar a quantidade de proteínas (no mínimo 0.8 gramas por dia) para um melhor resultado.";
+		if (proteina < 0.8) {
+			cout << PLUS8;
 		}
-		
 	}
 	
-	void retorno3(int &pontos){
+	void retorno3(int &pontos) {
 		// NATHALYA	
 	}
 
@@ -114,15 +107,14 @@ struct Usuario {
 
 int main() {
 	Usuario user;
-	Usuatia user2;
+	Usuario user2;
 	Usuario user3;
 	user.td = ganho_de_massa;
-	user2.td = dieta_para_emagreciento;
+	user2.td = emagrecimento;
 	user3.td = dieta_dos_pontos;
 	user.tipoDieta();
 	user2.tipoDieta();
 	user3.tipoDieta();
-	
 	
 	return 0;
 }
