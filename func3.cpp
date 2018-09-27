@@ -22,34 +22,18 @@ struct Usuario {
 	tipos_dieta td;
 	// primeiro indice livre
 	int index;
-
-	// Funcionalidade 3
 	// matriz que salva em tres colunas 1: data, 2: imc, 3: rcq.
-float indices[10][3];
+	float indices[10][3];
 };
 
 //Funcionalidade 3
-// As funcionalidades devem ser trabalhadas considerando um array de usuaraios
-/*float calculaIMC(int pos)
-    {
-        float imc;
-        imc = peso[pos] / pow(altura, 2);
-        return imc;
-    }*/
-
 float calculaIMC(Usuario user, int pos)
     {
         float imc;
         imc = user.peso[pos] / pow(user.altura, 2);
         return imc;
     }
-    /*float calculaRCQ(int pos)
-    {
-        float rcq;
-        rcq = circunferencia_abdominal[pos] / quadril[pos];
-        return rcq;
-    }*/
-
+   
     float calculaRCQ(Usuario user, int pos)
     {
         float rcq;
@@ -134,6 +118,7 @@ string avaliacaoIMC(Usuario user, int pos)
         }
     }
 
+//Main para testes dos metodos das funcionalidades 
 int main()
 {
     Usuario userTest;
