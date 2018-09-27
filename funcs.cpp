@@ -16,7 +16,7 @@ struct Usuario {
 	string senha;
 	string nome;
 	int idade;
-	char sexo;
+	string sexo;
 	float peso[10];
 	float altura;
 	float circunferencia_abdominal[10];
@@ -26,19 +26,19 @@ struct Usuario {
 	int index;
 	// matriz que salva em tres colunas 1: data, 2: imc, 3: rcq.
 	float indices[10][3];
-	// vetor que salva a porc de nutriente por refeição i
+	// vetor que salva os dados das 5 refeicoes diarias
 	float proteina [5];
 	float carboidrato[5];
 	float gordura[5];
-	float pontos[5];
+	int pontos[5];
 
 
 //Funcionalidade 2
-
+//Metodo para avaliar a porcao de proteina da dieta (1)
 void proteina_tipo1(float prot, int refeicao){
 	float peso_atual = peso[index - 1];
 	proteina[refeicao - 1] = prot;
-	float prot_total;
+	float prot_total = 0;
 	float media = (2 * peso_atual)/5;
 	for(int i = 0; i < refeicao; i++){
 		prot_total += proteina[i];
@@ -60,10 +60,11 @@ void proteina_tipo1(float prot, int refeicao){
 
 }
 
+//Metodo para avaliar a porcao de proteina da dieta (2)
 void proteina_tipo2(float prot, int refeicao){
 	float peso_atual = peso[index - 1];
 	proteina[refeicao - 1] = prot;
-	float prot_total;
+	float prot_total = 0;
 	for(int i = 0; i < refeicao; i++){
 		prot_total += proteina[i];
 	}
@@ -85,10 +86,11 @@ void proteina_tipo2(float prot, int refeicao){
 
 }
 
+//Metodo para avaliar a porcao de carboidrato da dieta (1)
 void carboidrato_tipo1(float carb, int refeicao){
 	carboidrato[refeicao - 1] = carb;
 
-	float carb_total;
+	float carb_total = 0;
 	for(int i = 0; i < refeicao; i++){
 		carb_total += carboidrato[i];
 	}
@@ -108,10 +110,11 @@ void carboidrato_tipo1(float carb, int refeicao){
 
 }
 
+//Metodo para avaliar a porcao de carboidrato da dieta (2)
 void carboidrato_tipo2(float carb, int refeicao){
 	carboidrato[refeicao - 1] = carb;
 
-	float carb_total;
+	float carb_total = 0;
 	for(int i = 0; i < refeicao; i++){
 		carb_total += carboidrato[i];
 	}
@@ -131,10 +134,11 @@ void carboidrato_tipo2(float carb, int refeicao){
 
 }
 
+//Metodo para avaliar a porcao de gordura das dietas (1 e 2)
 void gorduras(float gord, int refeicao){
 	gordura[refeicao - 1] = gord;
 
-	float gord_total;
+	float gord_total = 0;
 	for(int i = 0; i < refeicao; i++){
 		gord_total += gordura[i];
 	}
@@ -153,6 +157,27 @@ void gorduras(float gord, int refeicao){
 	cout << "Seu limite de GORDURA no dia é " << limite << "gramas\n." << endl;
 
 }
+
+//Metodo para avaliar e calcular os pontos da dieta (3)
+void calculaPontos(int ponto, int refeicao){
+	pontos[refeicao - 1] = ponto;
+	
+	int pontos_total = 0;
+	for(int i = 0; i < refeicao; i++){
+		pontos_total += pontos[i];
+	}
+	int media = 300/5;
+	int limite = 300 - pontos_total;
+	
+	if(ponto >= media){
+		cout << ADEQUATE_G;
+	}
+
+	if(ponto < media){
+		cout << LESS_G;
+	}
+	cout << "Tente consumir em média 60 pontos por refeição. \nSeu limite de PONTOS no dia é " << limite << endl;
+	}
 
 
 //Funcionalidade 3
@@ -207,15 +232,15 @@ string avaliacaoIMC(int pos)
     string avaliacaoRCQ(int pos)
     {
         string aval;
-        if ((indices[pos][2] < 0.80 && sexo == 'F') || (indices[pos][2] < 0.95 && sexo == 'M'))
+        if ((indices[pos][2] < 0.80 && sexo == "F") || (indices[pos][2] < 0.95 && sexo == "M"))
         {
             aval = "BAIXO RISCO DE SAUDE";
         }
-        else if ((indices[pos][2] >= 0.80 && indices[pos][2] <= 0.85 && sexo == 'F') || (indices[pos][2] >= 0.95 && indices[pos][2] <= 1.0 && sexo == 'M'))
+        else if ((indices[pos][2] >= 0.80 && indices[pos][2] <= 0.85 && sexo == "F") || (indices[pos][2] >= 0.95 && indices[pos][2] <= 1.0 && sexo == "M"))
         {
             aval = "MODERADO RISCO DE SAUDE";
         }
-        else if ((indices[pos][2] > 0.85 && sexo == 'F') || (indices[pos][2] > 1.0 && sexo == 'M'))
+        else if ((indices[pos][2] > 0.85 && sexo == "F") || (indices[pos][2] > 1.0 && sexo == "M"))
         {
             aval = "ALTO RISCO DE SAUDE";
         }
@@ -250,25 +275,36 @@ string avaliacaoIMC(int pos)
 //Main para testes dos metodos das funcionalidades
 int main()
 {
-    Usuario userTest;
-    userTest.index = 0;
-    userTest.sexo = 'F';
-    userTest.altura =1.75;
-    userTest.atualizarMedidas(20.07, 80.5, 1.6, 1.1);
-    userTest.atualizarMedidas(22.09, 70.5, 0.7, 1.0);
-    userTest.relatorioDeEvolucao();
-    userTest.proteina_tipo1(28.2, 1);
-    userTest.proteina_tipo1(40.0, 2);
-    userTest.carboidrato_tipo1(40.5,1);
-    userTest.gorduras(10.5,1);
+    //Teste da dieta tipo 1
+    Usuario user1;
+    user1.index = 0;
+    user1.sexo = "F";
+    user1.altura =1.75;
+    user1.atualizarMedidas(20.07, 80.5, 1.6, 1.1);
+    user1.atualizarMedidas(22.09, 70.5, 0.7, 1.0);
+    user1.relatorioDeEvolucao();
+    user1.proteina_tipo1(28.2, 1);
+    user1.proteina_tipo1(40.0, 2);
+    user1.carboidrato_tipo1(40.5,1);
+    user1.gorduras(10.5,1);
 
+//Teste da dieta tipo 2
     Usuario user2;
     user2.index = 0;
-    user2.sexo = 'M';
+    user2.sexo = "M";
     user2.altura = 1.6;
     user2.atualizarMedidas(27.09,54.5,0.7,1.0);
     user2.proteina_tipo2(28.2, 1);
-    user2.carboidrato_tipo2(15.5,1);
+	user2.carboidrato_tipo2(15.5,1);
 
+//Teste da dieta tipo 3
+	Usuario user3;
+	user3.index = 0;
+	user3.sexo = "F";
+	user3.altura = 1.8;
+	user3.atualizarMedidas(27.09, 90, 0.9, 1.0);
+	user3.calculaPontos(70,1);
+	user3.calculaPontos(50,2);
+    
     return 0;
 }
