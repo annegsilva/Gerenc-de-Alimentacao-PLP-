@@ -72,6 +72,8 @@ void login(Usuario usuarios[]) {
 		}
 	}
 	
+	if(userlogado.nome == "") { cout << "Usuario nao encontrado"; return;}
+	
 	// abaixo fluxo de execucao após logar ???
 	// funcionalidades 2 e 3
 }
@@ -145,8 +147,12 @@ void lerUsuarios(Usuario usuarios[]) {
 		while (!myfile.eof()) {
 			count = 0;
 			getline(myfile,line);
-			vector<string> usuario{explode(line, ';')};
+		
+			if(line == ""){
+				return;
+			}
 			
+			vector<string> usuario{explode(line, ';')};
 			for (auto n:usuario) {
 				if (n != "fim") {
 					usuario[count] = n;
