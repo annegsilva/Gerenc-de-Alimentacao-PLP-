@@ -34,6 +34,8 @@ using namespace std;
 # define ADEQUATE_G "Sua refeição tem a quantidade: IDEAL DE GORDURA!" << endl;
 # define LESS_G "Sua refeição tem a quantidade: MENOR QUE A IDEAL DE GORDURA! \nLembre-se que o consumo de gorduras BOAS também é importante!" << endl;
 
+# define ADEQUATE_PO "Sua refeição tem uma boa quantidade de PONTOS" << endl;
+# define LESS_PO "Sua refeição tem a quantidade: MENOR QUE A IDEAL DE PONTOS! \nLembre-se em consumir seus pontos de forma equilibrada." << endl;
 
 void initialMenu() {
 	cout << "Escolha uma opcao: " << endl;
