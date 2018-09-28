@@ -86,96 +86,76 @@ void proteina_tipo2(float prot, int refeicao){
 
 
 //Funcionalidade 3
-float calculaIMC(int pos)
-    {
-        float imc;
-        imc = peso[pos] / pow(altura, 2);
-        return imc;
-    }
+float calculaIMC(int pos) {
+	float imc;
+	imc = peso[pos] / pow(altura, 2);
+	return imc;
+}
 
-    float calculaRCQ(int pos)
-    {
-        float rcq;
-        rcq = circunferencia_abdominal[pos] / quadril[pos];
-        return rcq;
-    }
-string avaliacaoIMC(int pos)
-    {
-        string aval;
-        if (indices[pos][1] < 17.0)
-        {
-            aval = "MUITO ABAIXO DO PESO";
-        }
-        else if (indices[pos][1] >= 17.0 && indices[pos][1] < 18.5)
-        {
-            aval = "ABAIXO DO PESO";
-        }
-        else if (indices[pos][1] >= 18.5 && indices[pos][1] < 24.5)
-        {
-            aval = "PESO NORMAL";
-        }
-        else if (indices[pos][1] >= 24.5 && indices[pos][1] < 30)
-        {
-            aval = "ACIMA DO PESO";
-        }
-        else if (indices[pos][1] >= 30 && indices[pos][1] < 35)
-        {
-            aval = "OBESIDADE I";
-        }
-        else if (indices[pos][1] >= 35 && indices[pos][1] < 40)
-        {
-            aval = "OBESIDADE II (severa)";
-        }
-        else if (indices[pos][1] >= 40)
-        {
-            aval = "OBESIDADE III (mórbida)";
-        }
+float calculaRCQ(int pos) {
+	float rcq;
+	rcq = circunferencia_abdominal[pos] / quadril[pos];
+	return rcq;
+}
 
-        return aval;
-    }
+string avaliacaoIMC(int pos) {
+	string aval;
+	if (indices[pos][1] < 17.0) {
+		aval = "MUITO ABAIXO DO PESO";
+	} else if (indices[pos][1] >= 17.0 && indices[pos][1] < 18.5) {
+		aval = "ABAIXO DO PESO"; 
+	} else if (indices[pos][1] >= 18.5 && indices[pos][1] < 24.5) {
+		aval = "PESO NORMAL";
+	} else if (indices[pos][1] >= 24.5 && indices[pos][1] < 30) {
+		aval = "ACIMA DO PESO";
+	} else if (indices[pos][1] >= 30 && indices[pos][1] < 35) {
+		aval = "OBESIDADE I";
+	} else if (indices[pos][1] >= 35 && indices[pos][1] < 40) {
+	aval = "OBESIDADE II (severa)";
+	} else if (indices[pos][1] >= 40) {
+		aval = "OBESIDADE III (mórbida)";
+	}
 
-    string avaliacaoRCQ(int pos)
-    {
-        string aval;
-        if ((indices[pos][2] < 0.80 && sexo == 'F') || (indices[pos][2] < 0.95 && sexo == 'M'))
-        {
-            aval = "BAIXO RISCO DE SAUDE";
-        }
-        else if ((indices[pos][2] >= 0.80 && indices[pos][2] <= 0.85 && sexo == 'F') || (indices[pos][2] >= 0.95 && indices[pos][2] <= 1.0 && sexo == 'M'))
-        {
+	return aval;
+}
+
+string avaliacaoRCQ(int pos) {
+	string aval;
+	int index = indices[pos][2];
+	
+	
+	if ((index < 0.80 && sexo == 'F') || (index < 0.95 && sexo == 'M')) {
+		aval = "BAIXO RISCO DE SAUDE";
+	} else if ((index >= 0.80 && index <= 0.85 && sexo == 'F') || (index >= 0.95 && index <= 1.0 && sexo == 'M')) {
             aval = "MODERADO RISCO DE SAUDE";
-        }
-        else if ((indices[pos][2] > 0.85 && sexo == 'F') || (indices[pos][2] > 1.0 && sexo == 'M'))
-        {
-            aval = "ALTO RISCO DE SAUDE";
-        }
+	} else if ((index > 0.85 && sexo == 'F') || (index > 1.0 && sexo == 'M')) {
+		aval = "ALTO RISCO DE SAUDE";
+	}
 
-        return aval;
-    }
+	return aval;
+}
 
-    void atualizarMedidas(float data, float novoPeso, float novaCircAbdominal, float novoQuadril)
-    {
-        peso[index] = novoPeso;
-        circunferencia_abdominal[index]=novaCircAbdominal;
-        quadril[index]=novoQuadril;
-        indices[index][0] = data;
-        indices[index][1] = calculaIMC(index);
-        indices[index][2] = calculaRCQ(index);
-        index += 1;
-    }
+void atualizarMedidas(float data, float novoPeso, float novaCircAbdominal, float novoQuadril) {
+	peso[index] = novoPeso;
+    circunferencia_abdominal[index] = novaCircAbdominal;
+    quadril[index] = novoQuadril;
+    indices[index][0] = data;
+    indices[index][1] = calculaIMC(index);
+    indices[index][2] = calculaRCQ(index);
+    index += 1;
+}
 
-    void relatorioDeEvolucao()
-    {
-        for (int i = 0; i < index; i++)
-        {
-            std::cout << "Seus indices da data " << indices[i][0] << " são\n:" << endl;
-            std::cout << "IMC ...: " << indices[i][1] << endl;
-            std::cout << "Análise: " << avaliacaoIMC(i) << "\n" << endl;
-            std::cout << "RCQ....: " << indices[i][2] << endl;
-            std::cout << "Análise: " << avaliacaoRCQ(i) << "\n" << endl;
-        }
-    }
-    };
+void relatorioDeEvolucao() {
+	for (int i = 0; i < index; i++) {
+		std::cout << "Seus indices da data " << indices[i][0] << " são\n:" << endl;
+		std::cout << "IMC ...: " << indices[i][1] << endl;
+		std::cout << "Análise: " << avaliacaoIMC(i) << "\n" << endl;
+		std::cout << "RCQ....: " << indices[i][2] << endl;
+		std::cout << "Análise: " << avaliacaoRCQ(i) << "\n" << endl;
+	}
+}
+
+};
 
 //Main para testes dos metodos das funcionalidades
 int main()
