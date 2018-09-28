@@ -13,7 +13,7 @@ struct Usuario {
 	string senha;
 	string nome;
 	int idade;
-	char sexo;
+	string sexo;
 	float peso[10];
 	float altura;
 	float circunferencia_abdominal[10];

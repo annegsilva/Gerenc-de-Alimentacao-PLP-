@@ -14,6 +14,7 @@ using namespace std;
 # define ERROR "Erro";
 # define NAME "Nome: ";
 # define AGE "Idade: ";
+# define SEX "Sexo F(Feminino) M(Masculino): "
 # define WEIGHT "Peso (kg): ";
 # define HEIGHT "Altura (cm): ";
 # define CIRCUMF "Circunferência Abdominal (cm): ";
