@@ -10,7 +10,10 @@
 
 
 - Objetivo:
-	Desenvolver um mesmo projeto em 3 linguagens (C++, Haskell, Prolog)
+	Desenvolver um mesmo projeto em 3 paradigmas:
+	- Paradigma Imperativo: C++
+	- Paradigma Funcional: Haskell
+	- Paradigma Lógico: Prolog
 
 - Especificação:
 	Programa que gerencia uma alimentação de acordo com uma dieta predeterminada pelo usuário.
