@@ -11,9 +11,11 @@ main = do
  putStrLn("(3) Sair")
 
  entrada <- getLine
+ user <- readUser entrada
+ putStrLn(show user)
 
  if(entrada == "1") then do
-  putStrLn("digitei 1")
+  putStrLn("Username: ")
  else if (entrada == "2") then do
   putStrLn("digitei 2")
  else if (entrada == "3") then do
