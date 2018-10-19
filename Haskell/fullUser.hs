@@ -40,8 +40,9 @@ getNome (_,_,nome,_,_,_,_,_,_,_) = nome
 getIdade :: User -> Int
 getIdade (_,_,_,idade,_,_,_,_,_,_) = idade
 
-getIdade :: User -> String
-getIdade (_,_,_,_,sexo,_,_,_,_,_) = sexo
+-- Retorna o sexo do usuario
+getSexo :: User -> String
+getSexo (_,_,_,_,sexo,_,_,_,_,_) = sexo
 
 -- Retona o peso do usuario
 getPeso :: User -> Int -> Float
