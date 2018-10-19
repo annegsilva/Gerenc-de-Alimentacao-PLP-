@@ -9,6 +9,7 @@ main = do
  putStrLn("(1) Fazer Login")
  putStrLn("(2) Realizar Cadastro")
  putStrLn("(3) Sair")
+ putStr("Digite sua opcao: ")
 
  entrada <- getLine
  user <- readUser entrada
