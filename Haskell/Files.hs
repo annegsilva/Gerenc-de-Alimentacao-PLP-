@@ -18,6 +18,12 @@ login username password = do
   putStrLn("Senha Incorreta!") 
   return ("","","",0,0,0,0,0,0)
 
+register :: String -> String -> String -> Int -> Float -> Float -> Float -> Float -> Int -> IO()
+register username password nome idade peso altura circun quadril dieta = do 
+ let user = (username,password,nome,idade,peso,altura,circun,quadril,dieta) :: User
+ saveUser user
+ putStrLn("Usuario Salvo com Sucesso!")
+
 logout :: User -> IO()
 logout user = do
  saveUser user 
