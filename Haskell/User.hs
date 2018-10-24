@@ -20,7 +20,7 @@ type Pontos = [Float]
 -- Informacoes armazenadas (como uma Heap, onde cada indice equivale a um tipo de medida salva)
 type IMC =[Float]
 type RCQ =[Float]
-type DataUpdate =[Float]
+type DataUpdate =[String]
 
 -- estrutura de acesso ao User
 type User = (Username, Password, Nome, Idade, Sexo, Altura, Peso, Circunf, Quadril, Dieta, Proteina, Carboidrato, Gordura, Pontos, IMC, RCQ, DataUpdate)
@@ -92,7 +92,7 @@ getRCQ :: User -> [Float]
 getRCQ (_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,rcq,_) = rcq
 
 -- (16) Retorna a LISTA dos valores RCQ do usuario
-getDate :: User -> [Float]
+getDate :: User -> [String]
 getDate (_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,date) = date
 
 ----- Metodos Auxiliares Gerais -----
