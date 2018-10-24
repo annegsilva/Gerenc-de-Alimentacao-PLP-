@@ -20,7 +20,7 @@ type Pontos = [Float]
 -- Informacoes armazenadas (como uma Heap, onde cada indice equivale a um tipo de medida salva)
 type IMC =[Float]
 type RCQ =[Float]
-type DataUpdate =[String]
+type DataUpdate =[Float]
 
 -- estrutura de acesso ao User
 type User = (Username, Password, Nome, Idade, Sexo, Altura, Peso, Circunf, Quadril, Dieta, Proteina, Carboidrato, Gordura, Pontos, IMC, RCQ, DataUpdate)
@@ -92,7 +92,7 @@ getRCQ :: User -> [Float]
 getRCQ (_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,rcq,_) = rcq
 
 -- (16) Retorna a LISTA dos valores RCQ do usuario
-getDate :: User -> [String]
+getDate :: User -> [Float]
 getDate (_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,date) = date
 
 ----- Metodos Auxiliares Gerais -----
@@ -103,6 +103,10 @@ addValor :: [Float] -> Float -> [Float]
 addValor [] valor = [valor]
 addValor (x:xs) valor = valor:(x:xs)  
 
+-- Retorna o head (valor mais recente) de uma lista
+--Parametros lista = head
+getHead :: [Float] -> Float
+getHead (x:xs) = x
 
 ----- Metodos para Funcionalidade 2 (avaliacoes de refeicoes) -----
 
@@ -117,37 +121,27 @@ acumulaGramas (x:xs) = x + acumulaGramas xs
 limiteGramas :: Float -> Float -> Float
 limiteGramas max soma = max - soma
 
--- Avalia uma porcao de proteina de uma dieta tipo 1
--- Parametros: prot, pesoAtual = string de avaliacao
-avalProteina_1 :: Float -> Float -> String
-avalProteina_1 prot pesoAtual
-	| prot >= (1.4 * pesoAtual)/5 && prot <= (2 * pesoAtual)/5 = "Sua refeição tem a quantidade: IDEAL DE PROTEÍNA!"
-	| prot < (1.4 * pesoAtual)/5 = "Sua refeição tem a quantidade: MENOR QUE A IDEAL DE PROTEÍNA!"
-	| prot >(2 * pesoAtual)/5 = "Sua refeição tem a quantidade: SUPERIOR QUE A NECESSÁRIA DE PROTEÍNA! \nLembre-se que o nosso corpo tem um limite máximo de absorção."
+-- Avalia uma porcao de proteina de uma dieta tipo 1 e 2
+-- Parametros: prot, pesoAtual, dieta = string de avaliacao
+avalProteina :: Float -> Float -> Int-> String
+avalProteina_1 prot pesoAtual dieta
+	| prot >= (1.4 * pesoAtual)/5 && prot <= (2 * pesoAtual)/5 && dieta == 1 = "Sua refeição tem a quantidade: IDEAL DE PROTEÍNA!"
+	| prot < (1.4 * pesoAtual)/5 && dieta == 1 = "Sua refeição tem a quantidade: MENOR QUE A IDEAL DE PROTEÍNA!"
+	| prot >(2 * pesoAtual)/5 && dieta == 1 = "Sua refeição tem a quantidade: SUPERIOR QUE A NECESSÁRIA DE PROTEÍNA! \nLembre-se que o nosso corpo tem um limite máximo de absorção."
+	| prot >= (0.8 * pesoAtual)/5 && prot <= (1.4 * pesoAtual)/5 && dieta == 2= "Sua refeição tem a quantidade: IDEAL DE PROTEÍNA!"
+	| prot < (0.8 * pesoAtual)/5 && dieta == 2 = "Sua refeição tem a quantidade: MENOR QUE A IDEAL DE PROTEÍNA!"
+	| prot >(1.4 * pesoAtual)/5 && dieta == 2 = "Sua refeição tem a quantidade: SUPERIOR QUE A NECESSÁRIA DE PROTEÍNA! \nLembre-se que o nosso corpo tem um limite máximo de absorção."
 
--- Avalia uma porcao de proteina de uma dieta tipo 2
--- Parametros: prot, pesoAtual = string de avaliacao
-avalProteina_2 :: Float -> Float -> String
-avalProteina_2 prot pesoAtual
-	| prot >= (0.8 * pesoAtual)/5 && prot <= (1.4 * pesoAtual)/5 = "Sua refeição tem a quantidade: IDEAL DE PROTEÍNA!"
-	| prot < (0.8 * pesoAtual)/5 = "Sua refeição tem a quantidade: MENOR QUE A IDEAL DE PROTEÍNA!"
-	| prot >(1.4 * pesoAtual)/5 = "Sua refeição tem a quantidade: SUPERIOR QUE A NECESSÁRIA DE PROTEÍNA! \nLembre-se que o nosso corpo tem um limite máximo de absorção."
-
--- Avalia uma porcao de carboidratos de uma dieta tipo 1
--- Parametros: carb = string de avaliacao
-avalCarboidrato_1 :: Float -> String
-avalCarboidrato_1 carb
-	| carb >= 25 && carb <= 80 = "Sua refeição tem a quantidade: IDEAL DE CARBOIDRATOS!"
-	| carb < 25 ="Sua refeição tem a quantidade: MENOR QUE A IDEAL DE CARBOIDRATOS!"
-	| carb > 80 =  "Sua refeição tem a quantidade: SUPERIOR QUE A NECESSÁRIA DE CARBOIDRATOS! \nLembre-se que um alto consumo de carboitrados pode engordar."
-	 
--- Avalia uma porcao de carboidratos de uma dieta tipo 2
--- Parametros: carb = string de avaliacao
-avalCarboidrato_2 :: Float -> String
-avalCarboidrato_2 carb
-	| carb >= 10 && carb <= 30 = "Sua refeição tem a quantidade: IDEAL DE CARBOIDRATOS!"
-	| carb < 10 ="Sua refeição tem a quantidade: MENOR QUE A IDEAL DE CARBOIDRATOS!"
-	| carb > 30 =  "Sua refeição tem a quantidade: SUPERIOR QUE A NECESSÁRIA DE CARBOIDRATOS! \nLembre-se que um alto consumo de carboitrados pode engordar."
+-- Avalia uma porcao de carboidratos de uma dieta tipo 1 e 2
+-- Parametros: carb, dieta= string de avaliacao
+avalCarboidrato :: Float -> Int -> String
+avalCarboidrato carb dieta
+	| (carb >= 25 && carb <= 80) && dieta == 1 = "Sua refeição tem a quantidade: IDEAL DE CARBOIDRATOS!"
+	| carb < 25 && dieta == 1 ="Sua refeição tem a quantidade: MENOR QUE A IDEAL DE CARBOIDRATOS!"
+	| carb > 80 && dieta == 1 =  "Sua refeição tem a quantidade: SUPERIOR QUE A NECESSÁRIA DE CARBOIDRATOS! \nLembre-se que um alto consumo de carboitrados pode engordar."
+	| (carb >= 10 && carb <= 30) && dieta == 2 = "Sua refeição tem a quantidade: IDEAL DE CARBOIDRATOS!"
+	| carb < 10 && dieta == 2 =" Sua refeição tem a quantidade: MENOR QUE A IDEAL DE CARBOIDRATOS!"
+	| carb > 30 && dieta == 2 =  "Sua refeição tem a quantidade: SUPERIOR QUE A NECESSÁRIA DE CARBOIDRATOS! \nLembre-se que um alto consumo de carboitrados pode engordar."
 
 -- Avalia uma porcao de gordura das dietas do tipo 1 e 2
 -- Parametros: gord = string de avaliacao
