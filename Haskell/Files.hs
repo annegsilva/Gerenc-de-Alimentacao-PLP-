@@ -5,29 +5,32 @@ import System.IO.Error
 import System.IO
 import User
 
+usuarioNulo :: User
+usuarioNulo = ("","","",0,[],[],[],0,[],[],[],[],[],[],[])
+
 login :: String -> String -> IO User
 login username password = do
  user <- readUser username
- if (user == ("","","",0,0,0,0,0,0)) then do
+ if (user == usuarioNulo) then do
   putStrLn("Usuario inexistente!")
-  return ("","","",0,0,0,0,0,0)
+  return usuarioNulo
  else if (getPassword user == password) then do
   putStrLn("Logado com Sucesso!")
   return user
  else do
   putStrLn("Senha Incorreta!") 
-  return ("","","",0,0,0,0,0,0)
+  return usuarioNulo
 
-register :: String -> String -> String -> Int -> Float -> Float -> Float -> Float -> Int -> IO()
-register username password nome idade peso altura circun quadril dieta = do 
- let user = (username,password,nome,idade,peso,altura,circun,quadril,dieta) :: User
+register :: String -> String -> String -> Float -> Float -> Float -> Float -> Int -> IO()
+register username password sexo altura peso circun quadril dieta = do 
+ let user = (username,password,sexo,altura,[peso],[circun],[quadril],dieta,[],[],[],[],[],[],[]) :: User
  saveUser user
  putStrLn("Usuario Salvo com Sucesso!")
 
-logout :: User -> IO()
-logout user = do
+salvarAlteracao :: User -> IO()
+salvarAlteracao user = do
  saveUser user 
- putStrLn("Usuario deslogado!")
+ putStrLn("Alterações salvas com sucesso!")
 
 readUser :: String -> IO User
 readUser username = do
@@ -41,7 +44,7 @@ readUser username = do
  tratar_erro erro = if isDoesNotExistError erro
   then do
  {
-  return ("","","",0,0,0,0,0,0);
+  return usuarioNulo;
  }
  else ioError erro
  
