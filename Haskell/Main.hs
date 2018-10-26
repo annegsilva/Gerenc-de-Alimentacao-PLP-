@@ -1,54 +1,41 @@
 module Main where
 import User
-import System.Process as SP
+import Login
 
+--Cria arquivos para dietas do tipo 1 e 2
+--Paramentros: dieta
+arquivosDieta1e2 :: String -> IO()
+arquivosDieta1e2 username = do
+	write username "prot_1" "0"
+	write username "prot_2" "0"
+	write username "prot_3" "0"
+	write username "prot_4" "0"
+	write username "prot_5" "0"
+	write username "carb_1" "0"
+	write username "carb_2" "0"
+	write username "carb_3" "0"
+	write username "carb_4" "0"
+	write username "carb_5" "0"
+	write username "fat_1" "0"
+	write username "fat_2" "0"
+	write username "fat_3" "0"
+	write username "fat_4" "0"
+	write username "fat_5" "0"
+	return()
 
--- Transforma em array
--- Parametros: username, novoValor
---writeData :: String -> String -> IO()
---writeData username novoValor = do
---	vazio <- reading username "vazio"
---	aux <- reading username "datas"
---	let antigo = (read aux :: [String])
---	if (aux == vazio)
---		then do write username "datas" (novoValor++";")
---		else do write username "datas" "teste"
---	return()
-	
---Parametros: username, nome do atributo, novoValor
---writeFloat :: String -> String -> String -> IO()
---writeFloat username atributo novoValor = do
---	aux <- reading username atributo
---	let lista = (read aux :: [Float])
---	if(lista == [])
---	then do write username atributo ("["++novoValor++"]")
---	else do
---		let float = (read novoValor :: Float)
---		listaAux <- float:lista
---		let novaLista = (read listaAux :: String)
---		write username atributo novaLista
+arquivosDieta3 :: String -> IO()
+arquivosDieta3 username = do
+	write username "pontos" "0"
 
--- Escreve em arquivo o atributo especifico de um User
--- Parametros: username, atributo a ser escrito, novo valor do atributo a ser escrito
-write :: String -> String -> String ->  IO()
-write username atributo novoValor = do
-	let arquivo = username ++ "_" ++ atributo ++ ".txt"
-	SP.system ("echo " ++ novoValor ++ "> " ++ arquivo)
-	return() 
-
--- Lê de um arquivo os dados de um atributo de um user
---Parametros: username, nome do atriubuto = valor armazenado do atributo
-reading :: String -> String -> IO String
-reading username atributo = do
-	leitura <- readFile (username ++ "_" ++ atributo ++ ".txt")
-	return (leitura)
-	
 -- Exibe as opoces do menu principal
--- Parametros: flag = string de opcao
 menuPrincipal :: String
-menuPrincipal  = "----------  Bem Vindo ao Gerenciador de Alimentacao! ----------\n\n----- O QUE DESEJA FAZER ----- \n(1) Fazer Login \n(2) Realizar Cadastro \n(3) Sair \nDigite sua opção: "
+menuPrincipal  = "--------------- Bem Vindo ao Gerenciador de Alimentacao! --------------\n \n\n----------------- Você Está no Menu Principal -----------------\n\n \n----- O QUE DESEJA FAZER ----- \n(1) Fazer Login \n(2) Realizar Cadastro \n(3) Sair \nDigite sua opção: "
 
-	-- Metodo que exibe as opcoes e grava em arquivos os dados de um novo usuario
+-- Exibe as opoces do menu de UserLogado
+menuUser :: String
+menuUser = "\n\n------------------ Você Está no Menu do Usuário ------------------\n\n \n----- O QUE DESEJA FAZER ----- \n(1) Inserir Refeição \n(2) Atualizar Medidas \n(3) Relatorio de Evolução \n(4) Voltar ao Menu Principal \nDigite sua opção:"
+
+-- Metodo que exibe as opcoes e grava em arquivos os dados de um novo usuario
 cadastro :: IO()
 cadastro = do
 	putStrLn("--------------- Iniciando Cadastro -----------------")
@@ -87,10 +74,10 @@ cadastro = do
 	dieta <- getLine
 	write username "dieta" dieta
 	
-	write username "proteinas" "[]"
-	write username "carboidratos" "[]"
-	write username "gorduras" "[]"
-	write username "pontos" "[]"
+	if(dieta == "1" || dieta == "2")
+		then do arquivosDieta1e2 username
+	else arquivosDieta3 username
+	
 	write username "datas" "[]"
 	write username "imc" "[]"
 	write username "rcq" "[]"
@@ -117,17 +104,17 @@ atualizaMedidas username = do
 	
 	putStr("Data....(dd/mm/aa): ")
 	novaData <- getLine
-	writeData username novaData
+	write username "datas" novaData
 	
 	putStrLn("\n----- Atualização Realizada com Sucesso! -----\n")	
 	return()	
 
 relatorioEvolucao :: String -> IO()
 relatorioEvolucao username = do
-	aux1 <- reading username "imc"
-	aux2 <- reading username "rcq"
-	aux3 <- reading username "datas"
-	sexo <- reading username "sexo"
+	aux1 <- readString username "imc"
+	aux2 <- readString username "rcq"
+	aux3 <- readString username "datas"
+	sexo <- readString username "sexo"
 	
 	let imc = (read aux1 :: [Float])
 	let rcq = (read aux2 :: [Float])
@@ -135,22 +122,49 @@ relatorioEvolucao username = do
 	putStrLn(relatorioIndices datas imc rcq sexo)
 	
 	return ()
-	
 
+-- Paramentros: username
+insereRefeicao1e2 :: String -> IO()
+insereRefeicao1e2 username = do
+	putStrLn("----- Informe o numero equivalente a refeição a ser inserida (1, 2, 3, 4, 5) -----")
+	putStr("Número.......: ")
+	numero <- getLine
+	
+	putStrLn("----------- Informe a quantidade dos seguintes nutrientes em gramas (g) ----------")
+	
+	putStr("Proteínas....: ")
+	prot <- getLine
+	inserePorcao username "prot" numero prot
+	
+	putStr("Carboitrados.: ")
+	carb <- getLine
+	inserePorcao username "carb" numero carb
+	
+	putStr("Gorduras.....: ")
+	fat <- getLine
+	inserePorcao username "fat" numero fat
+	
+	putStrLn(\n ----- Refeição Registrada com Sucesso! ----- \n"
+	
 runMenuUser :: String -> IO()
 runMenuUser username = do
+	putStr(menuUser)
 	opcao <- getLine
-	if(opcao == "1")
-		then do putStrLn("Not implemented YET")
-	else if(opcao == "2")
-		then do atualizaMedidas username
-	else if (opcao == "3")
-		then do relatorioEvolucao username
+	if(opcao == "1") then do
+		insereRefeicao1e2 username
+		runMenuUser username
+	else if(opcao == "2") then do
+		atualizaMedidas username
+		runMenuUser username
+	else if (opcao == "3") then do
+		relatorioEvolucao username
+		runMenuUser username
 	else do runMenuPrincipal
 	return()
 
 runMenuPrincipal :: IO()
 runMenuPrincipal = do
+	putStr(menuPrincipal)
 	opcao <- getLine
 	let username = "anne"
 	if(opcao == "1") 
@@ -164,5 +178,4 @@ runMenuPrincipal = do
 
 main :: IO()
 main = do
-	putStrLn(menuPrincipal)
 	runMenuPrincipal
