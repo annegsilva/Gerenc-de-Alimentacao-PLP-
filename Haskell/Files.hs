@@ -6,15 +6,12 @@ import System.IO
 import User
 
 usuarioNulo :: User
-usuarioNulo = ("","","",0,[],[],[],0,[],[],[],[],[],[],[])
+usuarioNulo = ("","","",0,0,0,0,0,[],[],[],[],[],[],[])
 
 login :: String -> String -> IO User
 login username password = do
  user <- readUser username
- if (user == usuarioNulo) then do
-  putStrLn("Usuario inexistente!")
-  return usuarioNulo
- else if (getPassword user == password) then do
+ if (getPassword user == password) then do
   putStrLn("Logado com Sucesso!")
   return user
  else do
@@ -23,14 +20,13 @@ login username password = do
 
 register :: String -> String -> String -> Float -> Float -> Float -> Float -> Int -> IO()
 register username password sexo altura peso circun quadril dieta = do 
- let user = (username,password,sexo,altura,[peso],[circun],[quadril],dieta,[],[],[],[],[],[],[]) :: User
+ let user = (username,password,sexo,altura,peso,circun,quadril,dieta,[],[],[],[],[],[],[]) :: User
  saveUser user
  putStrLn("Usuario Salvo com Sucesso!")
 
 salvarAlteracao :: User -> IO()
 salvarAlteracao user = do
  saveUser user 
- putStrLn("Alterações salvas com sucesso!")
 
 readUser :: String -> IO User
 readUser username = do
