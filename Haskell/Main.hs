@@ -1,31 +1,9 @@
 module Main where
 import User
-import Login
+import Files
 
---Cria arquivos para dietas do tipo 1 e 2
---Paramentros: dieta
-arquivosDieta1e2 :: String -> IO()
-arquivosDieta1e2 username = do
-	write username "prot_1" "0"
-	write username "prot_2" "0"
-	write username "prot_3" "0"
-	write username "prot_4" "0"
-	write username "prot_5" "0"
-	write username "carb_1" "0"
-	write username "carb_2" "0"
-	write username "carb_3" "0"
-	write username "carb_4" "0"
-	write username "carb_5" "0"
-	write username "fat_1" "0"
-	write username "fat_2" "0"
-	write username "fat_3" "0"
-	write username "fat_4" "0"
-	write username "fat_5" "0"
-	return()
-
-arquivosDieta3 :: String -> IO()
-arquivosDieta3 username = do
-	write username "pontos" "0"
+cabecalho :: String
+cabecalho = "By:\nAnne Gabriele\nGabryelle Soares\nLarissa Amorim\nLeonardo Lima\nNathalya Raissa"
 
 -- Exibe as opoces do menu principal
 menuPrincipal :: String
@@ -33,8 +11,18 @@ menuPrincipal  = "--------------- Bem Vindo ao Gerenciador de Alimentacao! -----
 
 -- Exibe as opoces do menu de UserLogado
 menuUser :: String
-menuUser = "\n\n------------------ Você Está no Menu do Usuário ------------------\n\n \n----- O QUE DESEJA FAZER ----- \n(1) Inserir Refeição \n(2) Atualizar Medidas \n(3) Relatorio de Evolução \n(4) Voltar ao Menu Principal \nDigite sua opção:"
+menuUser = "\n\n------------------ Você Está no Menu do Usuário ------------------\n\n \n----- O QUE DESEJA FAZER ----- \n(1) Inserir Refeição \n(2) Atualizar Medidas \n(3) Relatorio de Evolução \n(4) Voltar ao Menu Principal \nDigite sua opção: "
 
+logarUser :: IO User
+logarUser = do
+	putStrLn("--------------- Iniciando Acesso -----------------")
+	putStr("Username..........: ")
+	username <- getLine
+	putStr("Password..........: ")
+	password <- getLine
+	userLogado <- login username password
+	return (userLogado)
+	
 -- Metodo que exibe as opcoes e grava em arquivos os dados de um novo usuario
 cadastro :: IO()
 cadastro = do
@@ -44,27 +32,23 @@ cadastro = do
 	username <- getLine
 	putStr("Password..........: ")
 	password <- getLine
+	
 	putStrLn("\n----- Agora Nos Conte Mais Sobre Você -----")
 	
 	putStr("Sexo........(F)(M): ")
 	sexo <- getLine
-	write username "sexo" sexo
-	
-	putStr("Altura........(cm): ")
+		
+	putStr("Altura........(m): ")
 	altura <- getLine
-	write username "altura" altura
 	
 	putStr("Peso..........(kg): ")
 	peso <- getLine
-	write username "peso" peso
 	
-	putStr("Cintura.......(cm): ")
+	putStr("Cintura.......(m): ")
 	cintura <- getLine
-	write username "cintura" cintura
 	
-	putStr("Quadril.......(cm): ")
+	putStr("Quadril.......(m): ")
 	quadril <- getLine
-	write username "quadril" quadril
 	
 	putStr("\n----- Cadastro Realizado com Sucesso! -----\n")
 	putStrLn("(1) Ganho de Massa Muscular")
@@ -72,60 +56,58 @@ cadastro = do
 	putStrLn("(3) Dieta dos Pontos")
 	putStr("Digite sua opção: ")
 	dieta <- getLine
-	write username "dieta" dieta
-	
-	if(dieta == "1" || dieta == "2")
-		then do arquivosDieta1e2 username
-	else arquivosDieta3 username
-	
-	write username "datas" "[]"
-	write username "imc" "[]"
-	write username "rcq" "[]"
-	
+	register username password sexo (read altura) (read peso) (read cintura) (read quadril) (read dieta)
 	putStrLn("\n----- Cadastro Realizado com Sucesso! -----\n")	
 	return()	
 
 -- Metodo que atualiza as novas medidas fornecidas por um usario já cadastrado 
 -- Parametros: username
-atualizaMedidas :: String -> IO()
-atualizaMedidas username = do
+
+atualizaMedidas :: User -> IO()
+atualizaMedidas user = do
 	putStrLn("\n------ Informe Suas Novas Medidas ------\n")
 	putStr("Peso..........(kg): ")
 	peso <- getLine
-	write username "peso" peso
+	let novoPeso = (read peso :: Float)
+	let a = setPeso novoPeso user :: User
 	
-	putStr("Cintura.......(cm): ")
+	putStr("Cintura.......(m): ")
 	cintura <- getLine
-	write username "cintura" cintura
+	let novaCintura = (read cintura :: Float)
+	let b = setCircunf novaCintura a :: User
 	
-	putStr("Quadril.......(cm): ")
+	putStr("Quadril.......(m): ")
 	quadril <- getLine
-	write username "quadril" quadril
+	let novoQuadril = (read quadril :: Float)
+	let c = setQuadril novoQuadril b :: User
 	
 	putStr("Data....(dd/mm/aa): ")
-	novaData <- getLine
-	write username "datas" novaData
+	date <- getLine
+	let novaData = (read date :: String)
+	let d = setDataUpdate (date:(getDate c)) c :: User
 	
+	let novoIMC = calculaIMC (getPeso d) (getAltura d)
+	putStrLn(show (getPeso d))
+	putStrLn(show (getAltura d))
+	let novoRCQ = calculaRCQ (getCircunf d) (getQuadril d)
+	let e = setIMC (novoIMC:(getIMC d)) d :: User
+	let f = setRCQ (novoRCQ:(getRCQ e)) e :: User
+	salvarAlteracao f
 	putStrLn("\n----- Atualização Realizada com Sucesso! -----\n")	
 	return()	
 
-relatorioEvolucao :: String -> IO()
-relatorioEvolucao username = do
-	aux1 <- readString username "imc"
-	aux2 <- readString username "rcq"
-	aux3 <- readString username "datas"
-	sexo <- readString username "sexo"
-	
-	let imc = (read aux1 :: [Float])
-	let rcq = (read aux2 :: [Float])
-	let datas = (read aux3 :: [String])
-	putStrLn(relatorioIndices datas imc rcq sexo)
-	
+relatorioEvolucao :: User -> IO()
+relatorioEvolucao user = do
+	let datas = getDate user
+	let imc = getIMC user
+	let rcq = getRCQ user
+	let sexo = getSexo user
+	putStrLn(relatorioIndices datas imc rcq sexo)	
 	return ()
 
 -- Paramentros: username
-insereRefeicao1e2 :: String -> IO()
-insereRefeicao1e2 username = do
+insereRefeicao1e2 :: User -> IO()
+insereRefeicao1e2 user = do
 	putStrLn("----- Informe o numero equivalente a refeição a ser inserida (1, 2, 3, 4, 5) -----")
 	putStr("Número.......: ")
 	numero <- getLine
@@ -134,31 +116,62 @@ insereRefeicao1e2 username = do
 	
 	putStr("Proteínas....: ")
 	prot <- getLine
-	inserePorcao username "prot" numero prot
+	let proteina = (read prot :: Float)
+	let a = setProteina (proteina:(getProt user)) user :: User
 	
 	putStr("Carboitrados.: ")
 	carb <- getLine
-	inserePorcao username "carb" numero carb
+	let carboidrato = (read carb :: Float)
+	let b = setCarbo (carboidrato:(getCarb a)) a :: User
 	
 	putStr("Gorduras.....: ")
 	fat <- getLine
-	inserePorcao username "fat" numero fat
+	let gordura = (read fat :: Float)
+	let c = setGordura (gordura:(getFat b)) b :: User
+	salvarAlteracao c
+	putStrLn("\n ----- Refeição Registrada com Sucesso! ----- \n")
 	
-	putStrLn(\n ----- Refeição Registrada com Sucesso! ----- \n"
+	putStrLn("\n -------- Avaliação da Porção de Proteínas -------- \n")
+	putStrLn(avalProteina proteina (getPeso c) (getDieta c))
+	putStrLn(avalConsumo (getPeso c) (getProt c) (getDieta c) 1)
 	
-runMenuUser :: String -> IO()
-runMenuUser username = do
+	putStrLn("\n ------- Avaliação da Porção de Carboidratos ------ \n")
+	putStrLn(avalCarboidrato carboidrato (getDieta c))
+	putStrLn(avalConsumo (getPeso c) (getCarb c) (getDieta c) 2)
+	
+	putStrLn("\n --------- Avaliação da Porção de Gorduras -------- \n")
+	putStrLn(avalGordura gordura)
+	putStrLn(avalConsumo 0 (getFat c) (getDieta c) 3)
+	return()
+
+insereRefeicao3 :: User -> IO()
+insereRefeicao3 user = do
+	putStrLn("----- Informe a quantidade de PONTOS equivalente a refeição a ser inserida  -----")
+	putStr("Pontos......: ")
+	pontos <- getLine
+	let novoPonto = (read pontos :: Float)
+	let a = setPontos (novoPonto:(getPontos user)) user :: User 
+	putStrLn(avalPontos novoPonto)
+	putStrLn(avalConsumo 0 (getPontos a) 3 0 )
+	return()
+
+runMenuUser :: User -> IO()
+runMenuUser user = do
 	putStr(menuUser)
 	opcao <- getLine
 	if(opcao == "1") then do
-		insereRefeicao1e2 username
-		runMenuUser username
+		if(getDieta user == 1 || getDieta user == 2) then do
+			insereRefeicao1e2 user
+			runMenuUser user
+		else do
+			insereRefeicao3 user
+			runMenuUser user
 	else if(opcao == "2") then do
-		atualizaMedidas username
-		runMenuUser username
+		atualizaMedidas user
+		runMenuUser user
 	else if (opcao == "3") then do
-		relatorioEvolucao username
-		runMenuUser username
+		relatorioEvolucao user
+		runMenuUser user
 	else do runMenuPrincipal
 	return()
 
@@ -166,16 +179,23 @@ runMenuPrincipal :: IO()
 runMenuPrincipal = do
 	putStr(menuPrincipal)
 	opcao <- getLine
-	let username = "anne"
 	if(opcao == "1") 
-		then do runMenuUser username 
+		then do 
+		userLogado <- logarUser
+		if(userLogado == usuarioNulo) then do
+			runMenuPrincipal
+		else		
+			runMenuUser userLogado
 	
 	else if(opcao == "2")
-		then do cadastro	
+		then do 
+		cadastro
+		runMenuPrincipal	 
 	
-	else do putStrLn("Deu certo")
+	else do putStrLn("Até a Próxima!")
 	return()	
 
 main :: IO()
 main = do
+	putStrLn(cabecalho)
 	runMenuPrincipal
