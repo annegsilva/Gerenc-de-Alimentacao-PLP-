@@ -6,9 +6,9 @@ type Password = String
 type Sexo = String
 --Informacoes Fisicas do Usuario
 type Altura = Float
-type Peso = [Float]
-type Circunf = [Float]
-type Quadril = [Float]
+type Peso = Float
+type Circunf = Float
+type Quadril = Float
 --Informacoes diarias do usuario
 type Dieta = Int
 type Proteina = [Float]
@@ -18,15 +18,45 @@ type Pontos = [Float]
 -- Informacoes armazenadas (como uma Heap, onde cada indice equivale a um tipo de medida salva)
 type IMC = [Float]
 type RCQ = [Float]
-type DataUpdate = [Float]
+type DataUpdate = [String]
 
 -- estrutura de acesso ao User
 type User = (Username, Password, Sexo, Altura, Peso, Circunf, Quadril, Dieta, Proteina, Carboidrato, Gordura, Pontos, IMC, RCQ, DataUpdate)
 
+-- Metodos Sets
 setPassword :: User -> User
 setPassword (username,password,sexo,altura,peso,circunf,quadril,dieta,proteina,carboidrato,gordura,pontos,imc,rcq,dataUpdate) = (username,"123",sexo,altura,peso,circunf,quadril,dieta,proteina,carboidrato,gordura,pontos,imc,rcq,dataUpdate)
--- Estrutura de Usuario
 
+setPeso :: Float -> User -> User
+setPeso newPeso (username,password,sexo,altura,peso,circunf,quadril,dieta,proteina,carboidrato,gordura,pontos,imc,rcq,dataUpdate) = (username,password,sexo,altura,newPeso,circunf,quadril,dieta,proteina,carboidrato,gordura,pontos,imc,rcq,dataUpdate)
+
+setQuadril :: Float -> User -> User
+setQuadril newQuadril (username,password,sexo,altura,peso,circunf,quadril,dieta,proteina,carboidrato,gordura,pontos,imc,rcq,dataUpdate) = (username,password,sexo,altura,peso,circunf,newQuadril,dieta,proteina,carboidrato,gordura,pontos,imc,rcq,dataUpdate)
+
+setCircunf :: Float -> User -> User
+setCircunf newCircunf (username,password,sexo,altura,peso,circunf,quadril,dieta,proteina,carboidrato,gordura,pontos,imc,rcq,dataUpdate) = (username,password,sexo,altura,peso,newCircunf,quadril,dieta,proteina,carboidrato,gordura,pontos,imc,rcq,dataUpdate)
+
+setProteina :: [Float] -> User -> User
+setProteina newProteina (username,password,sexo,altura,peso,circunf,quadril,dieta,proteina,carboidrato,gordura,pontos,imc,rcq,dataUpdate) = (username,password,sexo,altura,peso,circunf,quadril,dieta,newProteina,carboidrato,gordura,pontos,imc,rcq,dataUpdate)
+
+setPontos :: [Float] -> User -> User
+setPontos newPontos (username,password,sexo,altura,peso,circunf,quadril,dieta,proteina,carboidrato,gordura,pontos,imc,rcq,dataUpdate) = (username,password,sexo,altura,peso,circunf,quadril,dieta,proteina,carboidrato,gordura,newPontos,imc,rcq,dataUpdate)
+
+setCarbo :: [Float] -> User -> User
+setCarbo newCarbo (username,password,sexo,altura,peso,circunf,quadril,dieta,proteina,carboidrato,gordura,pontos,imc,rcq,dataUpdate) = (username,password,sexo,altura,peso,circunf,quadril,dieta,proteina,newCarbo,gordura,pontos,imc,rcq,dataUpdate)
+
+setGordura :: [Float] -> User -> User
+setGordura newGordura (username,password,sexo,altura,peso,circunf,quadril,dieta,proteina,carboidrato,gordura,pontos,imc,rcq,dataUpdate) = (username,password,sexo,altura,peso,circunf,quadril,dieta,proteina,carboidrato,newGordura,pontos,imc,rcq,dataUpdate)
+
+setIMC :: [Float] -> User -> User
+setIMC newIMC (username,password,sexo,altura,peso,circunf,quadril,dieta,proteina,carboidrato,gordura,pontos,imc,rcq,dataUpdate) = (username,password,sexo,altura,peso,circunf,quadril,dieta,proteina,carboidrato,gordura,pontos,newIMC,rcq,dataUpdate)
+
+setRCQ :: [Float] ->User -> User
+setRCQ newRCQ (username,password,sexo,altura,peso,circunf,quadril,dieta,proteina,carboidrato,gordura,pontos,imc,rcq,dataUpdate) = (username,password,sexo,altura,peso,circunf,quadril,dieta,proteina,carboidrato,gordura,pontos,imc,newRCQ,dataUpdate)
+
+setDataUpdate :: [String] -> User -> User
+setDataUpdate newDataUpdate (username,password,sexo,altura,peso,circunf,quadril,dieta,proteina,carboidrato,gordura,pontos,imc,rcq,dataUpdate) = (username,password,sexo,altura,peso,circunf,quadril,dieta,proteina,carboidrato,gordura,pontos,imc,rcq,newDataUpdate)
+-- Metodos Gets
 -- (1) Retorna o Username do usuario
 getUsername :: User -> String
 getUsername (username,_,_,_,_,_,_,_,_,_,_,_,_,_,_) = username
@@ -44,16 +74,16 @@ getAltura :: User -> Float
 getAltura (_,_,_,altura,_,_,_,_,_,_,_,_,_,_,_) = altura
 
 -- (5) Retona a LISTA de Pesos do usuario
-getPeso :: User -> [Float]
+getPeso :: User -> Float
 getPeso (_,_,_,_,peso,_,_,_,_,_,_,_,_,_,_) = peso
 
 -- (6) Retorna a LISTA das medidas de Circunferencia Abdominal do usuario 
-getCircunf :: User -> [Float]
+getCircunf :: User -> Float
 getCircunf (_,_,_,_,_,circunf,_,_,_,_,_,_,_,_,_) = circunf
 
 -- (7) Retorna a LISTA das medidas do Quadril do usuario
-getQuadil :: User -> [Float]
-getQuadil (_,_,_,_,_,_,quadril,_,_,_,_,_,_,_,_) = quadril
+getQuadril :: User -> Float
+getQuadril (_,_,_,_,_,_,quadril,_,_,_,_,_,_,_,_) = quadril
 
 -- (8) Retorna o tipo de Dieta do usuario
 getDieta :: User -> Int
@@ -84,7 +114,7 @@ getRCQ :: User -> [Float]
 getRCQ (_,_,_,_,_,_,_,_,_,_,_,_,_,rcq,_) = rcq
 
 -- (15) Retorna a LISTA dos valores RCQ do usuario
-getDate :: User -> [Float]
+getDate :: User -> [String]
 getDate (_,_,_,_,_,_,_,_,_,_,_,_,_,_,date) = date
 
 ----- Metodos Auxiliares Gerais -----
@@ -145,11 +175,12 @@ avalGordura gord
 
 -- Avalia uma refeicao baseada em pontos da dieta tipo 3
 -- Paramentros: pontos = string de avaliacao
-avalPontos :: Int -> String
+avalPontos :: Float -> String
 avalPontos pontos
  | pontos == 6 = "Sua refeição tem a quantidade: IDEAL DE PONTOS! (para 5 refeições diárias)"
  | pontos < 6 = "Sua refeição tem a quantidade: MENOR QUE A IDEAL DE PONTOS! \nLembre-se em consumir seus pontos de forma equilibrada."
  | pontos > 6 = "Sua refeição tem a quantidade: MAIOR QUE A IDEAL DE PONTOS! \nLembre-se em consumir seus pontos de forma equilibrada."
+
 -- Calcula limite de gramas para consumo
 -- Parametros: peso, lista de porcoes, dieta, porcao = string de avaliacao
 -- dieta (1) massa (2) emagrescimento (3) pontos
