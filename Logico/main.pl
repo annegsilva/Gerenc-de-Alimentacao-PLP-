@@ -20,26 +20,31 @@ printMenu:- write("---------- Voce esta no Menu Principal ----------\n \n"),
 
 cadastro:- write("cadastro").
 
-logarUser(User):- User = "".
+logarUser(User):- write("\nUsername: "),
+				  read_line_to_string(user_input,Username),
+				  write("Password: "),
+				  read_line_to_string(user_input,Password),
+				  login(Username,Password,Usuario),
+				  User = Usuario.
 
 runMenuUser(User):- write(User).
 
 menuPrincipal:- printMenu,
 				read_line_to_string(user_input,Opcao),
 				(Opcao == "1" ->
-					write("Login Selecionado"),
+					write("----- Iniciando Acesso -----\n"),
 					logarUser(User),
-					(User  == "" ->
+					(User == "" ->
 						menuPrincipal;
 
 					runMenuUser(User));
 				 Opcao == "2" ->
-				 	write("Cadastro Selecionado"),
+				 	write("----- Iniciando Cadastro -----\n"),
 				 	cadastro,
 				 	menuPrincipal;
 				 Opcao == "3" ->
-				 	write("Sair Selecionado");
-				 write("Opcao Invalida")).
+				 	write("Até um outro dia amigo :)");
+				 write("Opcao Invalida\n")).
 
 :- initialization main.
 

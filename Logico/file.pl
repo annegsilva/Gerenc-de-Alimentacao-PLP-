@@ -1,4 +1,4 @@
-:- module(file, [salvarUsuario/6,lerUsuario/2]).
+:- module(file, [salvarUsuario/6,login/3]).
 
 %! Usuario padrão
 usuario("leonardo","123","Leonardo",19,1.93,82.1).
@@ -6,7 +6,8 @@ usuario("leonardo","123","Leonardo",19,1.93,82.1).
 salvarUsuario(Username,Senha,NomeUser,Idade,Altura,Peso):-
 		downcase_atom(NomeUser,Nome),
 		string_concat(Username,".abc",NomeArquivo),
-		open(NomeArquivo,write,Stream),
+		string_concat("users/",NomeArquivo,NomeArquivoFinal),
+		open(NomeArquivoFinal,write,Stream),
 		add_in_list([],Username,UserFile),
 		add_in_list(UserFile,Senha,SenhaFile),
 		add_in_list(SenhaFile,Nome,NomeFile),
@@ -19,10 +20,19 @@ salvarUsuario(Username,Senha,NomeUser,Idade,Altura,Peso):-
 
 lerUsuario(Username,Usuario):-
 	string_concat(Username,".abc",NomeArquivo),
-	open(NomeArquivo, read, Stream),
+	string_concat("users/",NomeArquivo,NomeArquivoFinal),
+	open(NomeArquivoFinal, read, Stream),
 	read_term(Stream, L,[]),
 	close(Stream),
 	Usuario = L.
+
+
+login(Username,Password,Usuario):-
+	lerUsuario(Username,User),
+	getSenha(User,Senha),
+	(Senha == Password ->
+		Usuario = User;
+	 Usuario = "").
 
 %! Adicionar elemento em uma lista
 add_in_list(L, E, R) :- append(L, [E], R).
@@ -30,5 +40,5 @@ add_in_list(L, E, R) :- append(L, [E], R).
 %! Procurar elemento pelo indice
 %! nth0(0,[a,b,c],X).
 
-%! Retorna o segundo segundo elemento
-list_second([_,Second,_,_,_,_], Second).
+%! Retorna a Senha do usuario
+getSenha([_,Senha,_,_,_,_], Senha).
