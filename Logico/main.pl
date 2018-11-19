@@ -70,14 +70,13 @@ inserirRefeicao(User) :-
 	
 	write("Carboitrados.: "),
 	read_int(Carboitrados),
-	wrtie("aqui ta de boa"),
-	getCarboidrato(User1, AuxCarb),
-	wrtie("aqui tbm ta"),
-	AcumuladoCarb is AuxCarb + Carboitrados,
-	wrtie("ta massa"),
+	write("aqui ta de boa"),
+	write("aqui tbm ta"),
+	AcumuladoCarb is 1 + Carboitrados,
+	write("ta massa"),
 
 	aval_carboidrato(Carboitrados, Dieta, AcumuladoCarb),
-	wrtie("nao ta mais"),
+	write("nao ta mais"),
 	setCarboidrato(User1, AcumuladoCarb, User2),
 
 	write("Gorduras.....: "),
@@ -99,6 +98,7 @@ inserirPontos(User) :-
 	AcumuladoPontos is AuxPontos + Pontos,
 	setPontos(User, AcumuladoPontos, UserFinal),
 	atualizarUsuario(UserFinal).
+
 
 
 logarUser(User):- write("\nUsername: "),
