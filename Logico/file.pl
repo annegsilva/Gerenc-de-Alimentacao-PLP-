@@ -6,12 +6,13 @@ use_module(util).
 %! Proteina, Carboidrato, Gordura, Pontos, DataUpdate, IMC, RCQ 
 
 salvarUsuario(Username,Password,Sexo,Altura,Peso,Cintura,Quadril,Dieta):-
+		downcase_atom(Sexo,SexoS),
 		string_concat(Username,".abc",NomeArquivo),
 		string_concat("users/",NomeArquivo,NomeArquivoFinal),
 		open(NomeArquivoFinal,write,Stream),
 		add_in_list([],Username,UserFile),
 		add_in_list(UserFile,Password,SenhaFile),
-		add_in_list(SenhaFile,Sexo,SexoFile),
+		add_in_list(SenhaFile,SexoS,SexoFile),
 		add_in_list(SexoFile,Altura,AlturaFile),
 		add_in_list(AlturaFile,Peso,PesoFile),
 		add_in_list(PesoFile,Cintura,CinturaFile),
@@ -35,8 +36,9 @@ atualizarUsuario(User):-
 	string_concat("users/",NomeArquivo,NomeArquivoFinal),
 	open(NomeArquivoFinal,write,Stream),
 	write(Stream,User),
-	close(Stream).
-
+	write(Stream,"."),
+	close(Stream),
+	write("\n----- Alterações realizadas com Sucesso! -----\n").
 
 lerUsuario(Username,Usuario):-
 	string_chars(Username,Chars),
@@ -47,7 +49,6 @@ lerUsuario(Username,Usuario):-
 	read_term(Stream, L,[]),
 	nth0(0,L,Username1),
 	nth0(1,L,Password1),
-	nth0(2,L,Sexo1),
 	convertArrayCharToStr(Username1,NewUsername),
 	convertArrayCharToStr(Password1,NewPassword),
 	setUsername(L,NewUsername,Usuario1),

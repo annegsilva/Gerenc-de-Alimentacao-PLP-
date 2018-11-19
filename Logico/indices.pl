@@ -1,9 +1,4 @@
-:- initialization main.
-
-lerInt(Number) :- 
-read_line_to_codes(user_input, Codes),
-string_to_atom(Codes, Atom),
-atom_number(Atom, Number).
+:- module(indices, [calcula_imc/3,aval_imc/1,calcula_rcq/3,aval_rcq/2,relatorio_indices/4]).
 
 calcula_imc(Peso, Altura, IMC) :-
 	IMC is Peso / (Altura**2).
@@ -21,7 +16,7 @@ calcula_rcq(Cintura, Quadril, RCQ) :-
 	RCQ is Cintura / Quadril.
 
 aval_rcq(RCQ, Sexo) :-
-	(Sexo == "F" ->
+	(Sexo == "f" ->
 		(RCQ < 0.8 -> writeln("BAIXO RISCO DE SAÚDE");
 		RCQ > 0.85 -> writeln("ALTO RISCO DE SAÚDE");
 		writeln("MODERADO RISCO DE SAÚDE"));
@@ -37,17 +32,3 @@ relatorio_indices([X|XS], [Y|YS], [Z|ZS], Sexo) :-
 	write("Análise: "), aval_rcq(Z, Sexo),
 	(XS == [] -> write("");
 	relatorio_indices(XS, YS, ZS, Sexo)).
-	
-	
-main:-
-	lerInt(Peso),
-	lerInt(Altura),
-	calcula_imc(Peso, Altura, IMC),
-	calcula_rcq(Peso, Altura, RCQ),
-	writeln(IMC),
-	writeln(RCQ),
-	aval_imc(IMC),
-	aval_rcq(RCQ, "F"),
-	aval_rcq(RCQ, "M"),
-	read_line_to_string(user_input,Sexo),
-	relatorio_indices(["15/10/18","09/11/18"],[17, 20], [0.7, 0.8], Sexo).

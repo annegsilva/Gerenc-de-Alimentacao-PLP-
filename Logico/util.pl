@@ -1,8 +1,24 @@
-:- module(util, [read_int/1,add_in_list/3,convertArrayCharToStr/2,
+:- module(util, [read_int/1,add_in_list/3,convertArrayCharToStr/2,getTimeValue/2,getDataAtual/1,
 		  getUsername/2,getSenha/2,getSexo/2,getAltura/2,getPeso/2,getCintura/2,getQuadril/2,getDieta/2,
 		  getProteina/2,getCarboidrato/2,getGordura/2,getPontos/2,getDataUpdate/2,getIMC/2,getRCQ/2,
 		  setUsername/3,setSenha/3,setSexo/3,setAltura/3,setPeso/3,setCintura/3,setQuadril/3,setDieta/3,
 		  setProteina/3,setCarboidrato/3,setGordura/3,setPontos/3,setDataUpdate/3,setIMC/3,setRCQ/3]).
+
+%! Captura data atual
+getTimeValue(Key, Value):-
+    get_time(Stamp),
+    stamp_date_time(Stamp, DateTime, local),
+    date_time_value(Key, DateTime, Value).
+
+%! Retorna string da data atual
+getDataAtual(Date):-
+	getTimeValue(day,X),
+	getTimeValue(month,Y),
+	getTimeValue(year,Z),
+	string_concat(X,"/",Saida1),
+	string_concat(Saida1,Y,Saida2),
+	string_concat(Saida2,"/",Saida3),
+	string_concat(Saida3,Z,Date).
 
 %! Adicionar elemento em uma lista
 add_in_list(L, E, R) :- append(L, [E], R).
@@ -105,42 +121,42 @@ setPeso([Username,Password,Sexo,Altura,_,Cintura,Quadril,Dieta,
 setCintura([Username,Password,Sexo,Altura,Peso,_,Quadril,Dieta,
 		Proteina, Carboidrato, Gordura, Pontos, DataUpdate, IMC, RCQ],
 	   NewCintura,
-	   [Username,Password,Sexo,Sexo,Altura,Peso,NewCintura,Quadril,Dieta,
+	   [Username,Password,Sexo,Altura,Peso,NewCintura,Quadril,Dieta,
 	    Proteina, Carboidrato, Gordura, Pontos, DataUpdate, IMC, RCQ]).
 
 %! Seta o quadril do usuario
 setQuadril([Username,Password,Sexo,Altura,Peso,Cintura,_,Dieta,
 		Proteina, Carboidrato, Gordura, Pontos, DataUpdate, IMC, RCQ],
 	   NewQuadril,
-	   [Username,Password,Sexo,Sexo,Altura,Peso,Cintura,NewQuadril,Dieta,
+	   [Username,Password,Sexo,Altura,Peso,Cintura,NewQuadril,Dieta,
 	    Proteina, Carboidrato, Gordura, Pontos, DataUpdate, IMC, RCQ]).
 
 %! Seta a dieta do usuario
 setDieta([Username,Password,Sexo,Altura,Peso,Cintura,Quadril,_,
 		Proteina, Carboidrato, Gordura, Pontos, DataUpdate, IMC, RCQ],
 	   NewDieta,
-	   [Username,Password,Sexo,Sexo,Altura,Peso,Cintura,Quadril,NewDieta,
+	   [Username,Password,Sexo,Altura,Peso,Cintura,Quadril,NewDieta,
 	    Proteina, Carboidrato, Gordura, Pontos, DataUpdate, IMC, RCQ]).
 
 %! Seta a proteina do usuario
 setProteina([Username,Password,Sexo,Altura,Peso,Cintura,Quadril,Dieta,
 		_, Carboidrato, Gordura, Pontos, DataUpdate, IMC, RCQ],
 	   NewProteina,
-	   [Username,Password,Sexo,Sexo,Altura,Peso,Cintura,Quadril,Dieta,
+	   [Username,Password,Sexo,Altura,Peso,Cintura,Quadril,Dieta,
 	    NewProteina, Carboidrato, Gordura, Pontos, DataUpdate, IMC, RCQ]).
 
 %! Seta o carboidrato do usuario
 setCarboidrato([Username,Password,Sexo,Altura,Peso,Cintura,Quadril,Dieta,
 		Proteina, _, Gordura, Pontos, DataUpdate, IMC, RCQ],
 	   NewCarboidrato,
-	   [Username,Password,Sexo,Sexo,Altura,Peso,Cintura,Quadril,Dieta,
+	   [Username,Password,Sexo,Altura,Peso,Cintura,Quadril,Dieta,
 	    Proteina, NewCarboidrato, Gordura, Pontos, DataUpdate, IMC, RCQ]).
 
 %! Seta a gordura do usuario
 setGordura([Username,Password,Sexo,Altura,Peso,Cintura,Quadril,Dieta,
 		Proteina, Carboidrato,_, Pontos, DataUpdate, IMC, RCQ],
 	   NewGordura,
-	   [Username,Password,Sexo,Sexo,Altura,Peso,Cintura,Quadril,Dieta,
+	   [Username,Password,Sexo,Altura,Peso,Cintura,Quadril,Dieta,
 	    Proteina, Carboidrato,NewGordura, Pontos, DataUpdate, IMC, RCQ]).
 
 
@@ -148,26 +164,26 @@ setGordura([Username,Password,Sexo,Altura,Peso,Cintura,Quadril,Dieta,
 setPontos([Username,Password,Sexo,Altura,Peso,Cintura,Quadril,Dieta,
 		Proteina, Carboidrato, Gordura, _, DataUpdate, IMC, RCQ],
 	   NewPontos,
-	   [Username,Password,Sexo,Sexo,Altura,Peso,Cintura,Quadril,Dieta,
+	   [Username,Password,Sexo,Altura,Peso,Cintura,Quadril,Dieta,
 	    Proteina, Carboidrato, Gordura, NewPontos, DataUpdate, IMC, RCQ]).
 
 %! Seta a dataUpdate do usuario
 setDataUpdate([Username,Password,Sexo,Altura,Peso,Cintura,Quadril,Dieta,
 		Proteina, Carboidrato, Gordura, Pontos,_, IMC, RCQ],
 	   NewDataUpdate,
-	   [Username,Password,Sexo,Sexo,Altura,Peso,Cintura,Quadril,Dieta,
+	   [Username,Password,Sexo,Altura,Peso,Cintura,Quadril,Dieta,
 	    Proteina, Carboidrato, Gordura, Pontos, NewDataUpdate, IMC, RCQ]).
 
 %! Seta o IMC do usuario
 setIMC([Username,Password,Sexo,Altura,Peso,Cintura,Quadril,Dieta,
 		Proteina, Carboidrato, Gordura, Pontos, DataUpdate, _, RCQ],
 	   NewIMC,
-	   [Username,Password,Sexo,Sexo,Altura,Peso,Cintura,Quadril,Dieta,
+	   [Username,Password,Sexo,Altura,Peso,Cintura,Quadril,Dieta,
 	    Proteina, Carboidrato, Gordura, Pontos, DataUpdate, NewIMC, RCQ]).
 
 %! Seta O RCQ do usuario
 setRCQ([Username,Password,Sexo,Altura,Peso,Cintura,Quadril,Dieta,
 		Proteina, Carboidrato, Gordura, Pontos, DataUpdate, IMC,_],
 	   NewRCQ,
-	   [Username,Password,Sexo,Sexo,Altura,Peso,Cintura,Quadril,Dieta,
+	   [Username,Password,Sexo,Altura,Peso,Cintura,Quadril,Dieta,
 	    Proteina, Carboidrato, Gordura, Pontos, DataUpdate, IMC, NewRCQ]).

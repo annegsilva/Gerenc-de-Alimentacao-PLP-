@@ -1,7 +1,8 @@
 %! Ao carregar os arquivos pelo swipl lembrar de carregar todos, Ex: swipl file.pl main.pl 
-use_module(refeicoes).
 use_module(util).
 use_module(file).
+use_module(refeicoes).
+use_module(indices).
 
 printCreditos:- write("By:\n"),
 				write("Anne Gabriele\n"),
@@ -70,13 +71,10 @@ inserirRefeicao(User) :-
 	
 	write("Carboitrados.: "),
 	read_int(Carboitrados),
-	write("aqui ta de boa"),
-	write("aqui tbm ta"),
-	AcumuladoCarb is 1 + Carboitrados,
-	write("ta massa"),
+	getCarboidrato(User1,Carb),
+	AcumuladoCarb is Carb + Carboitrados,
 
 	aval_carboidrato(Carboitrados, Dieta, AcumuladoCarb),
-	write("nao ta mais"),
 	setCarboidrato(User1, AcumuladoCarb, User2),
 
 	write("Gorduras.....: "),
@@ -99,7 +97,52 @@ inserirPontos(User) :-
 	setPontos(User, AcumuladoPontos, UserFinal),
 	atualizarUsuario(UserFinal).
 
+atualizarMedidas(User):-
+	writeln("----- Informe suas novas medidas! -----"),
+	write("Peso.....(kg): "),
+	read_int(PesoAtual),
 
+	write("Cintura...(m): "),
+	read_int(CinturaAtual),
+
+	write("Quadril...(m): "),
+	read_int(QuadrilAtual),
+
+	getDataAtual(Data),
+	string_concat("Data da Medição: ",Data,DataMedicao),
+	writeln(DataMedicao),
+
+	setPeso(User,PesoAtual,User1),
+	setCintura(User1,CinturaAtual,User2),
+	setQuadril(User2,QuadrilAtual,User3),
+
+	getAltura(User,Altura),
+	calcula_imc(PesoAtual,Altura,CalculoIMC),
+	calcula_rcq(CinturaAtual,QuadrilAtual,CalculoRCQ),
+
+	getDataUpdate(User3,DataUpdate),
+	getIMC(User3,IMC),
+	getRCQ(User3,RCQ),
+
+	add_in_list(DataUpdate,Data,NewDataUpdate),
+	add_in_list(IMC,CalculoIMC,NewIMC),
+	add_in_list(RCQ,CalculoRCQ,NewRCQ),
+
+
+	setDataUpdate(User3,NewDataUpdate,User4),
+	setIMC(User4,NewIMC,User5),
+	setRCQ(User5,NewRCQ,User6),
+
+	writeln("----- Novas medidas atualizadas com Sucesso! ----- \n"),
+
+	atualizarUsuario(User6).
+
+gerarRelatorio(User):-
+	getDataUpdate(User,DataUpdate),
+	getIMC(User,IMC),
+	getRCQ(User,RCQ),
+	getSexo(User,Sexo),
+	relatorio_indices(DataUpdate,IMC,RCQ,Sexo).
 
 logarUser(User):- write("\nUsername: "),
 				  read_line_to_string(user_input,Username),
@@ -113,10 +156,22 @@ runMenuUser(User):-
 	read_int(Opcao),
 	(Opcao == 1 ->
 		getDieta(User, Dieta),
-		(Dieta == 3 -> inserirPontos(User);
-			inserirRefeicao(User));
-	writeln("ops")).
+		(Dieta == 3 -> inserirPontos(User),
+					   runMenuUser(User);
+			inserirRefeicao(User),
+			runMenuUser(User));
+	Opcao == 2 -> 
+		atualizarMedidas(User),
+		runMenuUser(User);
+	
+	Opcao == 3 ->
+		gerarRelatorio(User),
+		runMenuUser(User);
 
+	Opcao == 4 ->
+		menuPrincipal;
+
+	writeln("----- Entrada Inválida ----- \n"),runMenuUser(User)).
 
 menuPrincipal:- printMenu,
 				read_line_to_string(user_input,Opcao),
