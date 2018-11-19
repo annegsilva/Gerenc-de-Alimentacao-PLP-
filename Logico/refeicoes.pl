@@ -1,140 +1,100 @@
-%! Ao carregar os arquivos pelo swipl lembrar de carregar todos, Ex: swipl file.pl main.pl 
-use_module(refeicoes).
-use_module(util).
-use_module(file).
-
-printCreditos:- write("By:\n"),
-				write("Anne Gabriele\n"),
-				write("Gabryelle Soares\n"),
-				write("Larissa Amorin\n"),
-				write("Leonardo Lima\n"),
-				write("Nathalya Raissa\n"),
-				write("\n---------- Bem Vindo ao Gerenciador de Alimentacao! ----------\n").
+:- module(refeicoes, [aval_proteina/4, aval_carboidrato/3, aval_gordura/2, aval_pontos/2]).
 
 
-printMenu:- write("\n---------- Voce esta no Menu Principal ----------\n \n"),
-			write("----- O que deseja fazer -----\n"),
-			write("(1) Fazer Login\n"),
-			write("(2) Realizar Cadastro\n"),
-			write("(3) Sair\n"),
-			write("Digite sua opcao: ").
+%! Calcula o limite de gramas de proteinas consumidas por refeicao
+limite_gramas(Taxa, Peso, Limite) :-
+	Limite is (Taxa * Peso) /5 .
 
-printMenuUser :-
-	write("\n\n------------------ Você Está no Menu do Usuário ------------------\n\n"),
-	write("\n----- O QUE DESEJA FAZER ----- \n"),
-	writeln("(1) Inserir Refeição"),
-	writeln("(2) Atualizar Medidas"),
-	writeln("(3) Relatorio de Evolução"),
-	writeln("(4) Voltar ao Menu Principal"),
-	write("Digite sua opção: ").
+total_gramas(Taxa, Peso, Total) :-
+	Total is (Taxa * Peso).
 
-cadastro:- 	write("\n----- Determine seu nome de usuario e senha -----"),
-			write("\nUsername: "),
-			read_line_to_string(user_input,Username),
-			write("Password: "),
-			read_line_to_string(user_input,Password),
-			writeln("\n----- Agora nos conte mais sobre voce -----"),
-			write("Sexo......(F)(M): "),
-			read_line_to_string(user_input,Sexo),
-			write("Altura.......(m): "),
-			read_int(Altura),
-			write("Peso........(kg): "),
-			read_int(Peso),
-			write("Cintura......(m): "),
-			read_int(Cintura),
-			write("Quadril......(m): "),
-			read_int(Quadril),
+%! Retorna avaliacao das gramas de proteinas em uma refeicao
+aval_proteina(Gramas, Dieta, Peso, Acumulado) :-
+	(Dieta == 1 -> aval_proteina_1(Gramas, Peso, Acumulado);
+		aval_proteina_2(Gramas,Peso, Acumulado)).
 
-			write("\n---- Escolha o tipo de dieta -----"),
-			write("\n(1) Ganho de massa muscular"),
-			write("\n(2) Emagrecimento"),
-			write("\n(3) Dieta dos pontos\n"),
-			read_int(Dieta),
+aval_proteina_1(Gramas, Peso, Acumulado) :-
+	writeln("\nSua refeição tem a quantidade: "),
+	limite_gramas(1.4, Peso, LimiteInferior),
+	limite_gramas(2, Peso, LimiteSuperior),
+	(Gramas < LimiteInferior -> writeln("MENOR QUE A IDEAL DE PROTEÍNA! (>_<) \nLembre-se que o consumo de proteínas é essencial para o ganho de massa.");
+	Gramas > LimiteSuperior -> writeln("SUPERIOR QUE A NECESSÁRIA DE PROTEÍNA! (O.O) \nLembre-se que o nosso corpo tem um limite máximo de absorção.");
+	writeln("IDEAL DE PROTEÍNA! (＾▽＾)")),
+	Aux is round(LimiteSuperior),
+	string_concat(Aux, " gramas de proteina devem ser sua média de consumo por refeição. ", Media),
+	writeln(Media),
+	total_gramas(2, Peso, Total),
+	Resto is Total - Acumulado,
+	string_concat(Resto, " gramas de proteína é o seu limite de consumo para o resto do dia.", Limite),
+	writeln(Limite).
 
-			salvarUsuario(Username,Password,Sexo,Altura,Peso,Cintura,Quadril,Dieta).
+aval_proteina_2(Gramas, Peso, Acumulado) :-	
+	limite_gramas(0.8, Peso, LimiteInferior),
+	limite_gramas(1.4, Peso, LimiteSuperior),
+	(Gramas < LimiteInferior -> writeln("MENOR QUE A IDEAL DE PROTEÍNA! (>_<) \nLembre-se que o consumo de proteínas é essencial para o ganho de massa.");
+	Gramas > LimiteSuperior -> writeln("SUPERIOR QUE A NECESSÁRIA DE PROTEÍNA! (O.O) \nLembre-se que o nosso corpo tem um limite máximo de absorção.");
+	writeln("IDEAL DE PROTEÍNA! (＾▽＾) ")),
+	Aux2 is round(LimiteSuperior),
+	string_concat(Aux2, " gramas de proteina devem ser sua média de consumo por refeição. ", Media),
+	writeln(Media),
+	total_gramas(1.4, Peso, Total),
+	Resto is Total - Acumulado,
+	string_concat(Resto, " gramas de proteína é o seu limite de consumo para o resto do dia.", Limite),
+	writeln(Limite).
 
-inserirRefeicao(User) :-
+%! Retorna avaliacao das gramas de carboidratos em uma refeicao
+aval_carboidrato(Gramas, Dieta, Acumulado) :-
+	(Dieta == 1 -> aval_carboidrato_1(Gramas, Acumulado);
+		aval_carboidrato_2(Gramas, Acumulado)).
 
-	writeln("----------- Informe a quantidade dos seguintes nutrientes em gramas (g) ----------\n"),
+aval_carboidrato_1(Gramas, Acumulado) :-
+	writeln("\nSua refeição tem a quantidade: "),
+	LimiteInferior1 is 30,
+	LimiteSuperior1 is 80,
+	(Gramas < LimiteInferior1 -> writeln("MENOR QUE A IDEAL DE CARBOIDRATOS! (>_<) \nLembre-se que o consumo de carboitrados é de grande importância para o ganho de massa.");
+	Gramas > LimiteSuperior1 -> writeln("SUPERIOR QUE A NECESSÁRIA DE CARBOIDRATOS! (O.O)\nLembre-se que um alto consumo de carboitrados pode engordar.");
+	writeln("IDEAL DE CARBOIDRATOS! (＾▽＾) ")),
+	string_concat(LimiteSuperior1, " gramas de carboitrados devem ser sua média de consumo por refeição. ", Media1),
+	writeln(Media1),
+	Resto is 250 - Acumulado,
+	string_concat(Resto, " gramas de carboitrados é o seu limite de consumo para o resto do dia.", Limite1),
+	writeln(Limite1).
 	
-	write("Proteínas....: "),
-	read_int(Proteina),
-	getProteina(User, AuxProt),
-	AcumuladoProt is AuxProt + Proteina,
+aval_carboidrato_2(Gramas, Acumulado) :-
+	LimiteInferior2 is 10,
+	LimiteSuperior2 is 30,
+	(Gramas < LimiteInferior2 -> writeln("MENOR QUE A IDEAL DE CARBOIDRATOS!(>_<) \nLembre-se que o consumo de carboitrados também é importante.");
+	Gramas > LimiteSuperior2 -> writeln("SUPERIOR QUE A NECESSÁRIA DE CARBOIDRATOS! (O.O) \nLembre-se que um alto consumo de carboitrados pode engordar.");
+	writeln("IDEAL DE CARBOIDRATOS! (＾▽＾)")),
+	string_concat(LimiteSuperior2, " gramas de carboitrados devem ser sua média de consumo por refeição. ", Media2),
+	writeln(Media2),
+	Resto is 100 - Acumulado,
+	string_concat(Resto, " gramas de carboitrados é o seu limite de consumo para o resto do dia.", Limite2),
+	writeln(Limite2).
 
-	getDieta(User, Dieta),
-	getPeso(User, Peso),
-	aval_proteina(Proteina, Dieta, Peso, AcumuladoProt),
+%! Retorna avaliacao das gramas de gordura em uma refeicao
+aval_gordura(Gramas, Acumulado) :-
+	writeln("\nSua refeição tem a quantidade: "),
+	LimiteInferior is 5.6,
+	LimiteSuperior is 16.8,
+	(Gramas < LimiteInferior -> writeln("MENOR QUE A IDEAL DE GORDURAS! (>_<)");
+	Gramas > LimiteSuperior -> writeln("SUPERIOR QUE A NECESSÁRIA DE GORDURAS! (O.O) \nLembre-se que um alto consumo de gorduras é prejudicial à saúde.");	
+	writeln("IDEAL DE GORDURAS! (＾▽＾)")),
+	string_concat(LimiteSuperior, " gramas de gorduras devem ser sua média de consumo por refeição. ", Media),
+	writeln(Media),
+	Resto is 22.2 - Acumulado,
+	string_concat(Resto, " gramas de gorduras é o seu limite de consumo para o resto do dia.", Limite),
+	writeln(Limite).
 
-	setProteina(User, AcumuladoProt, User1),
-	
-	write("Carboitrados.: "),
-	read_int(Carboitrados),
-	write("aqui ta de boa"),
-	write("aqui tbm ta"),
-	AcumuladoCarb is 1 + Carboitrados,
-	write("ta massa"),
-
-	aval_carboidrato(Carboitrados, Dieta, AcumuladoCarb),
-	write("nao ta mais"),
-	setCarboidrato(User1, AcumuladoCarb, User2),
-
-	write("Gorduras.....: "),
-	read_int(Gorduras),
-	getGordura(User2, AuxFat),
-	AcumuladoFat is AuxFat + Gorduras,
-
-	aval_gordura(Gorduras, AcumuladoFat),
-
-	setGordura(User2, AcumuladoFat, UserFinal),
-	writeln("\n ----- Refeição Registrada com Sucesso! ----- \n"),
-	atualizarUsuario(UserFinal).
-
-inserirPontos(User) :-
-	writeln("----- Informe a quantidade de PONTOS equivalente a refeição a ser inserida  -----"),
-	write("Pontos......: "),
-	read_int(Pontos),
-	getPontos(User, AuxPontos),
-	AcumuladoPontos is AuxPontos + Pontos,
-	setPontos(User, AcumuladoPontos, UserFinal),
-	atualizarUsuario(UserFinal).
-
-
-
-logarUser(User):- write("\nUsername: "),
-				  read_line_to_string(user_input,Username),
-				  write("Password: "),
-				  read_line_to_string(user_input,Password),
-				  login(Username,Password,Usuario),
-				  User = Usuario.
-
-runMenuUser(User):-
-	printMenuUser,
-	read_int(Opcao),
-	(Opcao == 1 ->
-		getDieta(User, Dieta),
-		(Dieta == 3 -> inserirPontos(User);
-			inserirRefeicao(User));
-	writeln("ops")).
-
-
-menuPrincipal:- printMenu,
-				read_line_to_string(user_input,Opcao),
-				(Opcao == "1" ->
-					write("\n----- Iniciando Acesso -----\n"),
-					logarUser(User),
-					(User == "" ->
-						menuPrincipal;
-
-					runMenuUser(User));
-				 Opcao == "2" ->
-				 	write("\n----- Iniciando Cadastro -----\n"),
-				 	cadastro,
-				 	menuPrincipal;
-				 Opcao == "3" ->
-				 	write("Ate um outro dia amigo :)");
-write("Opcao Invalida\n")).
-
-:- initialization main.
-
-main:- printCreditos,menuPrincipal.
+%! Retorna avaliacao da quantidade de pontos em uma refeicao
+aval_pontos(Pontos, Acumulado) :-
+	writeln("\nSua refeição tem a quantidade: "),
+	LimitePontos is 6,
+	(Pontos < LimitePontos -> writeln("MENOR QUE A IDEAL DE PONTOS! (>_<) \nLembre-se em consumir seus pontos de forma equilibrada.");
+	Pontos > LimitePontos -> writeln("MAIOR QUE A IDEAL DE PONTOS!  (O.O) \nLembre-se em consumir seus pontos de forma equilibrada.");	
+	writeln("IDEAL DE PONTOS! (＾▽＾)")),
+	string_concat(LimitePontos, " pontos devem ser sua média de consumo por refeição. ", Media),
+	writeln(Media),
+	Resto is 30 - Acumulado,
+	string_concat(Resto, " pontos é o seu limite de consumo para o resto do dia.", Limite),
+	writeln(Limite).
