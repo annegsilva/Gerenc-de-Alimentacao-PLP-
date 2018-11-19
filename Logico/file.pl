@@ -3,6 +3,7 @@
 use_module(util).
 
 %! Usuario padrão
+%! Username, Senha, Sexo, Altura, Peso, Cintura, Quadril, Dieta, Proteina, Carboidrato, Gordura, Pontos, DataUpdate, IMC, RCQ
 usuario("leonardo","123","Leonardo",19,1.93,82.1).
 
 salvarUsuario(Username,Password,PrimeiroNome,Idade,Sexo,Altura,Peso,Cintura,Quadril,Dieta):-
