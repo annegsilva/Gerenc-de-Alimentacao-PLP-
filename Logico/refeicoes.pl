@@ -1,42 +1,45 @@
-:- module(refeicoes, [aval_proteina/4, aval_carboidrato/3, aval_gordura/2]).
+:- module(refeicoes, [aval_proteina/4, aval_carboidrato/3, aval_gordura/2, aval_pontos/2]).
 
-lerInt(Number) :- 
-read_line_to_codes(user_input, Codes),
-string_to_atom(Codes, Atom),
-atom_number(Atom, Number).
 
 %! Calcula o limite de gramas de proteinas consumidas por refeicao
 limite_gramas(Taxa, Peso, Limite) :-
 	Limite is (Taxa * Peso) /5 .
 
+total_gramas(Taxa, Peso, Total) :-
+	Total is (Taxa * Peso).
+
 %! Retorna avaliacao das gramas de proteinas em uma refeicao
 aval_proteina(Gramas, Dieta, Peso, Acumulado) :-
 	writeln("\nSua refeição tem a quantidade: "),
-	(Dieta == 1 ->
-		limite_gramas(1.4, Peso, LimiteInferior),
-		limite_gramas(2, Peso, LimiteSuperior),
-		(Gramas < LimiteInferior -> writeln("MENOR QUE A IDEAL DE PROTEÍNA! (>_<) \nLembre-se que o consumo de proteínas é essencial para o ganho de massa.");
-		Gramas > LimiteSuperior -> writeln("SUPERIOR QUE A NECESSÁRIA DE PROTEÍNA! (O.O) \nLembre-se que o nosso corpo tem um limite máximo de absorção.");
+	((Dieta == 1 ->
+		limite_gramas(1.4, Peso, LimiteInferior1),
+		limite_gramas(2, Peso, LimiteSuperior1),
+		(Gramas < LimiteInferior1 -> writeln("MENOR QUE A IDEAL DE PROTEÍNA! (>_<) \nLembre-se que o consumo de proteínas é essencial para o ganho de massa.");
+		Gramas > LimiteSuperior1 -> writeln("SUPERIOR QUE A NECESSÁRIA DE PROTEÍNA! (O.O) \nLembre-se que o nosso corpo tem um limite máximo de absorção.");
 		writeln("IDEAL DE PROTEÍNA! (＾▽＾)")),
-		Aux is round(LimiteSuperior),
-		string_concat(Aux, " gramas de proteina devem ser sua média de consumo por refeição. ", Media),
-		writeln(Media),
-		string_concat(Acumulado, " gramas de proteína é o seu limite de consumo para o resto do dia.", Limite),
+		Aux1 is round(LimiteSuperior1),
+		string_concat(Aux1, " gramas de proteina devem ser sua média de consumo por refeição. ", Media1),
+		writeln(Media1),
+		total_gramas(2, Peso, Total),
+		Resto is Total - Acumulado,
+		string_concat(Resto, " gramas de proteína é o seu limite de consumo para o resto do dia.", Limite),
 		writeln(Limite));
 	
 	(Dieta == 2 ->
-		limite_gramas(0.8, Peso, LimiteInferior),
-		limite_gramas(1.4, Peso, LimiteSuperior),
-		(Gramas < LimiteInferior -> writeln("MENOR QUE A IDEAL DE PROTEÍNA! (>_<) \nLembre-se que o consumo de proteínas é essencial para o ganho de massa.");
-		Gramas > LimiteSuperior -> writeln("SUPERIOR QUE A NECESSÁRIA DE PROTEÍNA! (O.O) \nLembre-se que o nosso corpo tem um limite máximo de absorção.");
+		limite_gramas(0.8, Peso, LimiteInferior2),
+		limite_gramas(1.4, Peso, LimiteSuperior2),
+		(Gramas < LimiteInferior2 -> writeln("MENOR QUE A IDEAL DE PROTEÍNA! (>_<) \nLembre-se que o consumo de proteínas é essencial para o ganho de massa.");
+		Gramas > LimiteSuperior2 -> writeln("SUPERIOR QUE A NECESSÁRIA DE PROTEÍNA! (O.O) \nLembre-se que o nosso corpo tem um limite máximo de absorção.");
 		writeln("IDEAL DE PROTEÍNA! (＾▽＾) ")),
-		Aux is round(LimiteSuperior),
-		string_concat(Aux, " gramas de proteina devem ser sua média de consumo por refeição. ", Media),
-		writeln(Media),
-		string_concat(Acumulado, " gramas de proteína é o seu limite de consumo para o resto do dia.\n", Limite),
+		Aux2 is round(LimiteSuperior2),
+		string_concat(Aux2, " gramas de proteina devem ser sua média de consumo por refeição. ", Media2),
+		writeln(Media2),
+		total_gramas(1.4, Peso, Total),
+		Resto is Total - Acumulado,
+		string_concat(Resto, " gramas de proteína é o seu limite de consumo para o resto do dia.", Limite),
 		writeln(Limite));
 
-	writeln("Opção inválida").
+	writeln("ERRO PROTEÍNA")).
 
 %! Retorna avaliacao das gramas de carboidratos em uma refeicao
 aval_carboidrato(Gramas, Dieta, Acumulado) :-
@@ -49,7 +52,8 @@ aval_carboidrato(Gramas, Dieta, Acumulado) :-
 		writeln("IDEAL DE CARBOIDRATOS! (＾▽＾) ")),
 		string_concat(LimiteSuperior1, " gramas de carboitrados devem ser sua média de consumo por refeição. ", Media1),
 		writeln(Media1),
-		string_concat(Acumulado, " gramas de carboitrados é o seu limite de consumo para o resto do dia.", Limite1),
+		Resto is 250 - Acumulado,
+		string_concat(Resto, " gramas de carboitrados é o seu limite de consumo para o resto do dia.", Limite1),
 		writeln(Limite1));
 	
 	(Dieta == 2 ->
@@ -60,10 +64,11 @@ aval_carboidrato(Gramas, Dieta, Acumulado) :-
 		writeln("IDEAL DE CARBOIDRATOS! (＾▽＾)")),
 		string_concat(LimiteSuperior2, " gramas de carboitrados devem ser sua média de consumo por refeição. ", Media2),
 		writeln(Media2),
-		string_concat(Acumulado, " gramas de carboitrados é o seu limite de consumo para o resto do dia.", Limite2),
+		Resto is 100 - Acumulado,
+		string_concat(Resto, " gramas de carboitrados é o seu limite de consumo para o resto do dia.", Limite2),
 		writeln(Limite2));
 
-	writeln("Opção inválida").
+	writeln("ERRO CARBOIDRATOS").
 
 %! Retorna avaliacao das gramas de gordura em uma refeicao
 aval_gordura(Gramas, Acumulado) :-
@@ -75,7 +80,8 @@ aval_gordura(Gramas, Acumulado) :-
 	writeln("IDEAL DE GORDURAS! (＾▽＾)")),
 	string_concat(LimiteSuperior, " gramas de gorduras devem ser sua média de consumo por refeição. ", Media),
 	writeln(Media),
-	string_concat(Acumulado, " gramas de gorduras é o seu limite de consumo para o resto do dia.", Limite),
+	Resto is 22.2 - Acumulado,
+	string_concat(Resto, " gramas de gorduras é o seu limite de consumo para o resto do dia.", Limite),
 	writeln(Limite).
 
 %! Retorna avaliacao da quantidade de pontos em uma refeicao
@@ -87,5 +93,6 @@ aval_pontos(Pontos, Acumulado) :-
 	writeln("IDEAL DE PONTOS! (＾▽＾)")),
 	string_concat(LimitePontos, " pontos devem ser sua média de consumo por refeição. ", Media),
 	writeln(Media),
-	string_concat(Acumulado, " pontos é o seu limite de consumo para o resto do dia.", Limite),
+	Resto is 30 - Acumulado,
+	string_concat(Resto, " pontos é o seu limite de consumo para o resto do dia.", Limite),
 	writeln(Limite).
