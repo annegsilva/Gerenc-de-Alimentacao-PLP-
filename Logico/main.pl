@@ -70,6 +70,38 @@ menuPrincipal:- printMenu,
 				 	write("Ate um outro dia amigo :)");
 				 write("Opcao Invalida\n")).
 
+
+inserirRefeicao(User) :-
+    writeln("----- Informe o numero equivalente a refeição a ser inserida (1, 2, 3, 4, 5) -----"),
+    write("Número.......: "),
+    read_int(Numero),    writeln("----------- Informe a quantidade dos seguintes nutrientes em gramas (g) ----------\n"),
+    
+    write("Proteínas....: "),
+    read_int(Proteina),
+    getProteina(User, AuxProt),
+    AcumuladoProt is AuxProt + Proteina,    getDieta(User, Dieta),
+    getPeso(User, Peso),
+    aval_proteina(Proteina, Dieta, Peso, AcumuladoProt),    setProteina(User, AcumuladoProt, User1),
+    
+    write("Carboitrados.: "),
+    read_int(Carboitrados),
+    getCarboidrato(User1, AuxCarb),
+    AcumuladoCarb is AuxCarb + Carboitrados,    aval_carboidrato(Carboitrados, Dieta, AcumuladoCarb),    setCarboidrato(User1, AcumuladoCarb, User2),    write("Gorduras.....: "),
+    read_int(Gorduras),
+    getGordura(User2, AuxFat),
+    AcumuladoFat is AuxFat + Gorduras,    aval_gordura(Gorduras, AcumuladoFat),    setGordura(User2, AcumuladoFat, UserFinal),
+    writeln("\n ----- Refeição Registrada com Sucesso! ----- \n"),
+    atualizarUsuario(UserFinal).
+
+inserirPontos(User) :-
+    writeln("----- Informe a quantidade de PONTOS equivalente a refeição a ser inserida  -----"),
+    write("Pontos......: "),
+    read_int(Pontos),
+    getPontos(User, AuxPontos),
+    AcumuladoPontos is AuxPontos + Pontos,
+    setPontos(User, AcumuladoPontos, UserFinal),
+    atualizarUsuario(UserFinal).
+
 :- initialization main.
 
 main:- printCreditos,menuPrincipal.
