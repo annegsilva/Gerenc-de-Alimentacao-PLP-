@@ -25,11 +25,6 @@ cadastro:- 	write("\n----- Determine seu nome de usuario e senha -----"),
 			write("Password: "),
 			read_line_to_string(user_input,Password),
 			write("\n----- Agora nos conte mais sobre voce -----"),
-			write("\nNome..........: "),
-			read_line_to_string(user_input,Nome),
-			split_string(Nome," ","",S),nth0(0,S,PrimeiroNome),
-			write("Idade...........: "),
-			read_int(Idade),
 			write("Sexo......(F)(M): "),
 			read_line_to_string(user_input,Sexo),
 			write("Altura.......(m): "),
@@ -47,7 +42,7 @@ cadastro:- 	write("\n----- Determine seu nome de usuario e senha -----"),
 			write("\n(3) Dieta dos pontos\n"),
 			read_int(Dieta),
 
-			salvarUsuario(Username,Password,PrimeiroNome,Idade,Sexo,Altura,Peso,Cintura,Quadril,Dieta).
+			salvarUsuario(Username,Password,Sexo,Altura,Peso,Cintura,Quadril,Dieta).
 
 logarUser(User):- write("\nUsername: "),
 				  read_line_to_string(user_input,Username),
