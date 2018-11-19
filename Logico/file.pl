@@ -45,16 +45,19 @@ lerUsuario(Username,Usuario):-
 	atom_chars(A,Chars),
 	string_concat(A,".abc",NomeArquivo),
 	string_concat("users/",NomeArquivo,NomeArquivoFinal),
-	open(NomeArquivoFinal, read, Stream),
-	read_term(Stream, L,[]),
-	nth0(0,L,Username1),
-	nth0(1,L,Password1),
-	convertArrayCharToStr(Username1,NewUsername),
-	convertArrayCharToStr(Password1,NewPassword),
-	setUsername(L,NewUsername,Usuario1),
-	setSenha(Usuario1,NewPassword,UsuarioFinal),
-	close(Stream),
-	Usuario = UsuarioFinal.
+	( exists_file(NomeArquivoFinal) -> 
+		open(NomeArquivoFinal, read, Stream),
+		read_term(Stream, L,[]),
+		nth0(0,L,Username1),
+		nth0(1,L,Password1),
+		convertArrayCharToStr(Username1,NewUsername),
+		convertArrayCharToStr(Password1,NewPassword),
+		setUsername(L,NewUsername,Usuario1),
+		setSenha(Usuario1,NewPassword,UsuarioFinal),
+		close(Stream),
+		Usuario = UsuarioFinal;
+
+	writeln("----- Usuario não existente -----")).
 
 login(Username,Password,Usuario):-
 	lerUsuario(Username,User),
