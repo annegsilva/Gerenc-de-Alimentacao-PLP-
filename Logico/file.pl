@@ -1,4 +1,4 @@
-:- module(file, [salvarUsuario/8,login/3]).
+:- module(file, [salvarUsuario/8,login/3,atualizarUsuario/1]).
 
 use_module(util).
 
@@ -28,6 +28,15 @@ salvarUsuario(Username,Password,Sexo,Altura,Peso,Cintura,Quadril,Dieta):-
 		write(Stream,"."),
 		close(Stream),
 		write("\n----- Salvo com Sucesso! -----\n"). 
+
+atualizarUsuario(User):-
+	getUsername(User,Username),
+	string_concat(Username,".abc",NomeArquivo),
+	string_concat("users/",NomeArquivo,NomeArquivoFinal),
+	open(NomeArquivoFinal,write,Stream),
+	write(Stream,User),
+	close(Stream).
+
 
 lerUsuario(Username,Usuario):-
 	string_chars(Username,Chars),
