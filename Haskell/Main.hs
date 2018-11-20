@@ -2,7 +2,6 @@ module Main where
 import User
 import Files
 
-cabecalho = "By:\nAnne Gabriele\nGabryelle Soares\nLarissa Amorim\nLeonardo Lima\nNathalya Raissa"
 -- Busca um usuario na lista de usuarios cadastrados
 -- Parametros: lista de usuarios, username, password = usuario
 -- loginUser :: [User] -> String -> String -> User
