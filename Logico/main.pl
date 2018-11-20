@@ -37,19 +37,23 @@ cadastro:- 	write("\n----- Determine seu nome de usuario e senha -----"),
 			writeln("\n----- Agora nos conte mais sobre voce -----"),
 			write("Sexo......(F)(M): "),
 			read_line_to_string(user_input, Sexo),
-			(Sexo =\= "F"; Sexo =\= "M"; Sexo =\= "f"; Sexo =\= "m" -> write("Digite F para feminino e M para masculino"), cadastro),
+			(Sexo \= "F"; Sexo \= "M"; Sexo \= "f"; Sexo \= "m" -> writeln("----- Digite F para feminino e M para masculino -----"), cadastro;
+			
 			write("Altura.......(m): "),
 			read_int(Altura),
-			(String(Altura) -> write("Digite a altura em metros"), cadastro),
+			(string(Altura) -> writeln("----- Digite a altura em metros -----"), cadastro;
+			
 			write("Peso........(kg): "),
 			read_int(Peso),
-			(String(Peso) -> write("Digite o peso em quilos"), cadastro),
+			(string(Peso) -> writeln("----- Digite o peso em quilos -----"), cadastro;
+			
 			write("Cintura......(m): "),
 			read_int(Cintura),
-			(String(Cintura) -> write("Digite a cintura em metros"), cadastro),
-			write("Quadril......(m): "),
+			(string(Cintura) -> writeln("----- Digite a cintura em metros -----"), cadastro;
+			
+			write("Quadril......(m): "), 
 			read_int(Quadril),
-			(String(Quadril) -> write("Digite o quadril em metros"), cadastro),
+			(string(Quadril) -> writeln("----- Digite o quadril em metros -----"), cadastro;
 
 			write("\n---- Escolha o tipo de dieta -----"),
 			write("\n(1) Ganho de massa muscular"),
@@ -57,7 +61,7 @@ cadastro:- 	write("\n----- Determine seu nome de usuario e senha -----"),
 			write("\n(3) Dieta dos pontos\n"),
 			read_int(Dieta),
 
-			salvarUsuario(Username, Password, Sexo, Altura, Peso, Cintura, Quadril, Dieta).
+			salvarUsuario(Username, Password, Sexo, Altura, Peso, Cintura, Quadril, Dieta)))))).
 
 inserirRefeicao(User) :-
 
@@ -65,7 +69,7 @@ inserirRefeicao(User) :-
 	
 	write("Proteínas....: "),
 	read_int(Proteina),
-	(String(Proteina) -> write("Digite a quantidade de proteínas em gramas"), inserirRefeicao(User)),
+	(string(Proteina) -> writeln("----- Digite a quantidade de proteínas em gramas -----"), inserirRefeicao(User);
 	getProteina(User, AuxProt),
 	AcumuladoProt is AuxProt + Proteina,
 
@@ -73,26 +77,27 @@ inserirRefeicao(User) :-
 	getPeso(User, Peso),
 	aval_proteina(Proteina, Dieta, Peso, AcumuladoProt),
 
-	setProteina(User, AcumuladoProt, User1),
+	setProteina(User, AcumuladoProt, User1)),
 	
 	write("Carboidratos.: "),
 	read_int(Carboidratos),
-	(String(Carboidratos) -> write("Digite a quantidade de carboidratos em gramas"), inserirRefeicao(User)),
+	(string(Carboidratos) -> writeln("----- Digite a quantidade de carboidratos em gramas -----"), inserirRefeicao(User);
 	getCarboidrato(User1,Carb),
 	AcumuladoCarb is Carb + Carboidratos,
 
 	aval_carboidrato(Carboidratos, Dieta, AcumuladoCarb),
-	setCarboidrato(User1, AcumuladoCarb, User2),
+	setCarboidrato(User1, AcumuladoCarb, User2)),
 
 	write("Gorduras.....: "),
 	read_int(Gorduras),
-	(String(Gorduras) -> write("Digite a quantidade de gorduras em gramas"), inserirRefeicao(User)),
+	(string(Gorduras) -> writeln("----- Digite a quantidade de gorduras em gramas -----"), inserirRefeicao(User);
 	getGordura(User2, AuxFat),
 	AcumuladoFat is AuxFat + Gorduras,
 
 	aval_gordura(Gorduras, AcumuladoFat),
 
-	setGordura(User2, AcumuladoFat, UserFinal),
+	setGordura(User2, AcumuladoFat, UserFinal)),
+
 	writeln("\n ----- Refeição Registrada com Sucesso! ----- \n"),
 	atualizarUsuario(UserFinal).
 
@@ -100,7 +105,7 @@ inserirPontos(User) :-
 	writeln("----- Informe a quantidade de PONTOS equivalente a refeição a ser inserida  -----"),
 	write("Pontos......: "),
 	read_int(Pontos),
-	(String(Pontos) -> write("Tente novamente."), inserirPontos(User)),
+	(string(Pontos) -> writeln("----- Digite o numero de pontos. -----"), inserirPontos(User)),
 	getPontos(User, AuxPontos),
 	AcumuladoPontos is AuxPontos + Pontos,
 	setPontos(User, AcumuladoPontos, UserFinal),
@@ -110,16 +115,16 @@ atualizarMedidas(User):-
 	writeln("----- Informe suas novas medidas! -----"),
 	write("Peso.....(kg): "),
 	read_int(PesoAtual),
-	(String(PesoAtual) -> write("Digite o peso em quilos"), atualizarMedidas(User)),
+	(string(PesoAtual) -> write("----- Digite o peso em quilos -----"), atualizarMedidas(User)),
 
 	write("Cintura...(m): "),
 	read_int(CinturaAtual),
-	(String(CinturaAtual) -> write("Digite a cintura em metros"), atualizarMedidas(User)),
+	(string(CinturaAtual) -> writeln("----- Digite a cintura em metros -----"), atualizarMedidas(User)),
 
 
 	write("Quadril...(m): "),
 	read_int(QuadrilAtual),
-	(String(QuadrilAtual) -> write("Digite o quadril em quilos"), atualizarMedidas(User)),
+	(string(QuadrilAtual) -> writeln("----- Digite o quadril em quilos -----"), atualizarMedidas(User)),
 
 
 	getDataAtual(Data),
