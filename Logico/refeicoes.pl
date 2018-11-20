@@ -51,25 +51,25 @@ aval_carboidrato_1(Gramas, Acumulado) :-
 	writeln("\nSua refeição tem a quantidade: "),
 	LimiteInferior1 is 30,
 	LimiteSuperior1 is 80,
-	(Gramas < LimiteInferior1 -> writeln("MENOR QUE A IDEAL DE CARBOIDRATOS! (>_<) \nLembre-se que o consumo de carboitrados é de grande importância para o ganho de massa.");
-	Gramas > LimiteSuperior1 -> writeln("SUPERIOR QUE A NECESSÁRIA DE CARBOIDRATOS! (O.O)\nLembre-se que um alto consumo de carboitrados pode engordar.");
+	(Gramas < LimiteInferior1 -> writeln("MENOR QUE A IDEAL DE CARBOIDRATOS! (>_<) \nLembre-se que o consumo de carboidratos é de grande importância para o ganho de massa.");
+	Gramas > LimiteSuperior1 -> writeln("SUPERIOR QUE A NECESSÁRIA DE CARBOIDRATOS! (O.O)\nLembre-se que um alto consumo de carboidratos pode engordar.");
 	writeln("IDEAL DE CARBOIDRATOS! (＾▽＾) ")),
-	string_concat(LimiteSuperior1, " gramas de carboitrados devem ser sua média de consumo por refeição. ", Media1),
+	string_concat(LimiteSuperior1, " gramas de carboidratos devem ser sua média de consumo por refeição. ", Media1),
 	writeln(Media1),
 	Resto is 250 - Acumulado,
-	string_concat(Resto, " gramas de carboitrados é o seu limite de consumo para o resto do dia.", Limite1),
+	string_concat(Resto, " gramas de carboidratos é o seu limite de consumo para o resto do dia.", Limite1),
 	writeln(Limite1).
 	
 aval_carboidrato_2(Gramas, Acumulado) :-
 	LimiteInferior2 is 10,
 	LimiteSuperior2 is 30,
-	(Gramas < LimiteInferior2 -> writeln("MENOR QUE A IDEAL DE CARBOIDRATOS!(>_<) \nLembre-se que o consumo de carboitrados também é importante.");
-	Gramas > LimiteSuperior2 -> writeln("SUPERIOR QUE A NECESSÁRIA DE CARBOIDRATOS! (O.O) \nLembre-se que um alto consumo de carboitrados pode engordar.");
+	(Gramas < LimiteInferior2 -> writeln("MENOR QUE A IDEAL DE CARBOIDRATOS!(>_<) \nLembre-se que o consumo de carboidratos também é importante.");
+	Gramas > LimiteSuperior2 -> writeln("SUPERIOR QUE A NECESSÁRIA DE CARBOIDRATOS! (O.O) \nLembre-se que um alto consumo de carboidratos pode engordar.");
 	writeln("IDEAL DE CARBOIDRATOS! (＾▽＾)")),
-	string_concat(LimiteSuperior2, " gramas de carboitrados devem ser sua média de consumo por refeição. ", Media2),
+	string_concat(LimiteSuperior2, " gramas de carboidratos devem ser sua média de consumo por refeição. ", Media2),
 	writeln(Media2),
 	Resto is 100 - Acumulado,
-	string_concat(Resto, " gramas de carboitrados é o seu limite de consumo para o resto do dia.", Limite2),
+	string_concat(Resto, " gramas de carboidratos é o seu limite de consumo para o resto do dia.", Limite2),
 	writeln(Limite2).
 
 %! Retorna avaliacao das gramas de gordura em uma refeicao

@@ -31,20 +31,25 @@ printMenuUser :-
 
 cadastro:- 	write("\n----- Determine seu nome de usuario e senha -----"),
 			write("\nUsername: "),
-			read_line_to_string(user_input,Username),
+			read_line_to_string(user_input, Username),
 			write("Password: "),
-			read_line_to_string(user_input,Password),
+			read_line_to_string(user_input, Password),
 			writeln("\n----- Agora nos conte mais sobre voce -----"),
 			write("Sexo......(F)(M): "),
-			read_line_to_string(user_input,Sexo),
+			read_line_to_string(user_input, Sexo),
+			(Sexo =\= "F"; Sexo =\= "M"; Sexo =\= "f"; Sexo =\= "m" -> write("Digite F para feminino e M para masculino"), cadastro),
 			write("Altura.......(m): "),
 			read_int(Altura),
+			(String(Altura) -> write("Digite a altura em metros"), cadastro),
 			write("Peso........(kg): "),
 			read_int(Peso),
+			(String(Peso) -> write("Digite o peso em quilos"), cadastro),
 			write("Cintura......(m): "),
 			read_int(Cintura),
+			(String(Cintura) -> write("Digite a cintura em metros"), cadastro),
 			write("Quadril......(m): "),
 			read_int(Quadril),
+			(String(Quadril) -> write("Digite o quadril em metros"), cadastro),
 
 			write("\n---- Escolha o tipo de dieta -----"),
 			write("\n(1) Ganho de massa muscular"),
@@ -52,7 +57,7 @@ cadastro:- 	write("\n----- Determine seu nome de usuario e senha -----"),
 			write("\n(3) Dieta dos pontos\n"),
 			read_int(Dieta),
 
-			salvarUsuario(Username,Password,Sexo,Altura,Peso,Cintura,Quadril,Dieta).
+			salvarUsuario(Username, Password, Sexo, Altura, Peso, Cintura, Quadril, Dieta).
 
 inserirRefeicao(User) :-
 
@@ -60,6 +65,7 @@ inserirRefeicao(User) :-
 	
 	write("Proteínas....: "),
 	read_int(Proteina),
+	(String(Proteina) -> write("Digite a quantidade de proteínas em gramas"), inserirRefeicao(User)),
 	getProteina(User, AuxProt),
 	AcumuladoProt is AuxProt + Proteina,
 
@@ -69,16 +75,18 @@ inserirRefeicao(User) :-
 
 	setProteina(User, AcumuladoProt, User1),
 	
-	write("Carboitrados.: "),
-	read_int(Carboitrados),
+	write("Carboidratos.: "),
+	read_int(Carboidratos),
+	(String(Carboidratos) -> write("Digite a quantidade de carboidratos em gramas"), inserirRefeicao(User)),
 	getCarboidrato(User1,Carb),
-	AcumuladoCarb is Carb + Carboitrados,
+	AcumuladoCarb is Carb + Carboidratos,
 
-	aval_carboidrato(Carboitrados, Dieta, AcumuladoCarb),
+	aval_carboidrato(Carboidratos, Dieta, AcumuladoCarb),
 	setCarboidrato(User1, AcumuladoCarb, User2),
 
 	write("Gorduras.....: "),
 	read_int(Gorduras),
+	(String(Gorduras) -> write("Digite a quantidade de gorduras em gramas"), inserirRefeicao(User)),
 	getGordura(User2, AuxFat),
 	AcumuladoFat is AuxFat + Gorduras,
 
@@ -92,6 +100,7 @@ inserirPontos(User) :-
 	writeln("----- Informe a quantidade de PONTOS equivalente a refeição a ser inserida  -----"),
 	write("Pontos......: "),
 	read_int(Pontos),
+	(String(Pontos) -> write("Tente novamente."), inserirPontos(User)),
 	getPontos(User, AuxPontos),
 	AcumuladoPontos is AuxPontos + Pontos,
 	setPontos(User, AcumuladoPontos, UserFinal),
@@ -101,12 +110,17 @@ atualizarMedidas(User):-
 	writeln("----- Informe suas novas medidas! -----"),
 	write("Peso.....(kg): "),
 	read_int(PesoAtual),
+	(String(PesoAtual) -> write("Digite o peso em quilos"), atualizarMedidas(User)),
 
 	write("Cintura...(m): "),
 	read_int(CinturaAtual),
+	(String(CinturaAtual) -> write("Digite a cintura em metros"), atualizarMedidas(User)),
+
 
 	write("Quadril...(m): "),
 	read_int(QuadrilAtual),
+	(String(QuadrilAtual) -> write("Digite o quadril em quilos"), atualizarMedidas(User)),
+
 
 	getDataAtual(Data),
 	string_concat("Data da Medição: ",Data,DataMedicao),
@@ -187,7 +201,7 @@ menuPrincipal:- printMenu,
 				 	cadastro,
 				 	menuPrincipal;
 				 Opcao == "3" ->
-				 	write("Ate um outro dia amigo :)");
+				 	write("Ate outro dia amigo :)");
 write("Opcao Invalida\n")).
 
 :- initialization main.
