@@ -32,3 +32,5 @@ relatorio_indices([X|XS], [Y|YS], [Z|ZS], Sexo) :-
 	write("Análise: "), aval_rcq(Z, Sexo),
 	(XS == [] -> write("");
 	relatorio_indices(XS, YS, ZS, Sexo)).
+
+relatorio_indices([],[],[],_) :- writeln("\n ---- Você ainda não atualizou suas medidas para gerar um relatorio -----").
