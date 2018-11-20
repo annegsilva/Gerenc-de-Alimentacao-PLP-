@@ -26,50 +26,41 @@ printMenuUser :-
 	writeln("(1) Inserir Refeição"),
 	writeln("(2) Atualizar Medidas"),
 	writeln("(3) Relatorio de Evolução"),
-	writeln("(4) Voltar ao Menu Principal"),
-	write("Digite sua opção: ").
+	writeln("(4) Voltar ao Menu Principal").
 
 cadastro:- 	write("\n----- Determine seu nome de usuario e senha -----"),
+			
 			write("\nUsername: "),
 			read_line_to_string(user_input, Username),
+			
 			write("Password: "),
 			read_line_to_string(user_input, Password),
 			writeln("\n----- Agora nos conte mais sobre voce -----"),
-			write("Sexo......(F)(M): "),
-			read_line_to_string(user_input, Sexo),
-			(Sexo \= "F"; Sexo \= "M"; Sexo \= "f"; Sexo \= "m" -> writeln("----- Digite F para feminino e M para masculino -----"), cadastro;
 			
-			write("Altura.......(m): "),
-			read_int(Altura),
-			(string(Altura) -> writeln("----- Digite a altura em metros -----"), cadastro;
+			valida_sexo("Sexo......(F)(M): ", Sexo),
 			
-			write("Peso........(kg): "),
-			read_int(Peso),
-			(string(Peso) -> writeln("----- Digite o peso em quilos -----"), cadastro;
+			valida_inteiro("Altura.......(m): ", Altura),
 			
-			write("Cintura......(m): "),
-			read_int(Cintura),
-			(string(Cintura) -> writeln("----- Digite a cintura em metros -----"), cadastro;
+			valida_inteiro("Peso........(kg): ", Peso),
 			
-			write("Quadril......(m): "), 
-			read_int(Quadril),
-			(string(Quadril) -> writeln("----- Digite o quadril em metros -----"), cadastro;
+			valida_inteiro("Cintura......(m): ", Cintura),
+			
+			valida_inteiro("Quadril......(m): ", Quadril),
 
 			write("\n---- Escolha o tipo de dieta -----"),
 			write("\n(1) Ganho de massa muscular"),
 			write("\n(2) Emagrecimento"),
 			write("\n(3) Dieta dos pontos\n"),
-			read_int(Dieta),
+			valida_inteiro("Digite sua opção: ", Dieta),
 
-			salvarUsuario(Username, Password, Sexo, Altura, Peso, Cintura, Quadril, Dieta)))))).
+			salvarUsuario(Username, Password, Sexo, Altura, Peso, Cintura, Quadril, Dieta).
 
-inserirRefeicao(User) :-
+inserirRefeicao(User, UserUpdate) :-
 
 	writeln("----------- Informe a quantidade dos seguintes nutrientes em gramas (g) ----------\n"),
 	
-	write("Proteínas....: "),
-	read_int(Proteina),
-	(string(Proteina) -> writeln("----- Digite a quantidade de proteínas em gramas -----"), inserirRefeicao(User);
+	valida_inteiro("\nProteínas....: ", Proteina),
+	
 	getProteina(User, AuxProt),
 	AcumuladoProt is AuxProt + Proteina,
 
@@ -77,55 +68,47 @@ inserirRefeicao(User) :-
 	getPeso(User, Peso),
 	aval_proteina(Proteina, Dieta, Peso, AcumuladoProt),
 
-	setProteina(User, AcumuladoProt, User1)),
+	setProteina(User, AcumuladoProt, User1),
 	
-	write("Carboidratos.: "),
-	read_int(Carboidratos),
-	(string(Carboidratos) -> writeln("----- Digite a quantidade de carboidratos em gramas -----"), inserirRefeicao(User);
+	valida_inteiro("\nCarboidratos.: ", Carboidratos),
+	
 	getCarboidrato(User1,Carb),
 	AcumuladoCarb is Carb + Carboidratos,
 
 	aval_carboidrato(Carboidratos, Dieta, AcumuladoCarb),
-	setCarboidrato(User1, AcumuladoCarb, User2)),
+	setCarboidrato(User1, AcumuladoCarb, User2),
 
-	write("Gorduras.....: "),
-	read_int(Gorduras),
-	(string(Gorduras) -> writeln("----- Digite a quantidade de gorduras em gramas -----"), inserirRefeicao(User);
+	valida_inteiro("\nGorduras.....: ", Gorduras),
 	getGordura(User2, AuxFat),
 	AcumuladoFat is AuxFat + Gorduras,
 
 	aval_gordura(Gorduras, AcumuladoFat),
 
-	setGordura(User2, AcumuladoFat, UserFinal)),
-
+	setGordura(User2, AcumuladoFat, UserFinal),
 	writeln("\n ----- Refeição Registrada com Sucesso! ----- \n"),
+	UserUpdate = UserFinal,
 	atualizarUsuario(UserFinal).
 
-inserirPontos(User) :-
+inserirPontos(User, UserUpdate) :-
 	writeln("----- Informe a quantidade de PONTOS equivalente a refeição a ser inserida  -----"),
-	write("Pontos......: "),
-	read_int(Pontos),
-	(string(Pontos) -> writeln("----- Digite o numero de pontos. -----"), inserirPontos(User)),
+	valida_inteiro("\nPontos......: ",Pontos),
 	getPontos(User, AuxPontos),
 	AcumuladoPontos is AuxPontos + Pontos,
+	
+	aval_pontos(Pontos, AcumuladoPontos),
+	
 	setPontos(User, AcumuladoPontos, UserFinal),
+	UserUpdate = UserFinal,
 	atualizarUsuario(UserFinal).
 
-atualizarMedidas(User):-
+atualizarMedidas(User, UserUpdate):-
 	writeln("----- Informe suas novas medidas! -----"),
-	write("Peso.....(kg): "),
-	read_int(PesoAtual),
-	(string(PesoAtual) -> write("----- Digite o peso em quilos -----"), atualizarMedidas(User)),
+	valida_inteiro("Peso.....(kg): ", PesoAtual),
 
-	write("Cintura...(m): "),
-	read_int(CinturaAtual),
-	(string(CinturaAtual) -> writeln("----- Digite a cintura em metros -----"), atualizarMedidas(User)),
+	valida_inteiro("Cintura...(m): ", CinturaAtual),
 
 
-	write("Quadril...(m): "),
-	read_int(QuadrilAtual),
-	(string(QuadrilAtual) -> writeln("----- Digite o quadril em quilos -----"), atualizarMedidas(User)),
-
+	valida_inteiro("Quadril...(m): ", QuadrilAtual),
 
 	getDataAtual(Data),
 	string_concat("Data da Medição: ",Data,DataMedicao),
@@ -153,7 +136,8 @@ atualizarMedidas(User):-
 	setRCQ(User5,NewRCQ,User6),
 
 	writeln("----- Novas medidas atualizadas com Sucesso! ----- \n"),
-
+	
+	UserUpdate = User6,
 	atualizarUsuario(User6).
 
 gerarRelatorio(User):-
@@ -172,16 +156,16 @@ logarUser(User):- write("\nUsername: "),
 
 runMenuUser(User):-
 	printMenuUser,
-	read_int(Opcao),
+	valida_inteiro("Digite sua opção: ", Opcao),
 	(Opcao == 1 ->
 		getDieta(User, Dieta),
-		(Dieta == 3 -> inserirPontos(User),
-					   runMenuUser(User);
-			inserirRefeicao(User),
-			runMenuUser(User));
+		(Dieta == 3 -> inserirPontos(User, UserUpdate),
+					   runMenuUser(UserUpdate);
+			inserirRefeicao(User, UserUpdate),
+			runMenuUser(UserUpdate));
 	Opcao == 2 -> 
-		atualizarMedidas(User),
-		runMenuUser(User);
+		atualizarMedidas(User, UserUpdate),
+		runMenuUser(UserUpdate);
 	
 	Opcao == 3 ->
 		gerarRelatorio(User),

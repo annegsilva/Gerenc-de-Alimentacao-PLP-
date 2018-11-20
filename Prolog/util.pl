@@ -2,7 +2,26 @@
 		  getUsername/2,getSenha/2,getSexo/2,getAltura/2,getPeso/2,getCintura/2,getQuadril/2,getDieta/2,
 		  getProteina/2,getCarboidrato/2,getGordura/2,getPontos/2,getDataUpdate/2,getIMC/2,getRCQ/2,
 		  setUsername/3,setSenha/3,setSexo/3,setAltura/3,setPeso/3,setCintura/3,setQuadril/3,setDieta/3,
-		  setProteina/3,setCarboidrato/3,setGordura/3,setPontos/3,setDataUpdate/3,setIMC/3,setRCQ/3]).
+		  setProteina/3,setCarboidrato/3,setGordura/3,setPontos/3,setDataUpdate/3,setIMC/3,setRCQ/3, valida_inteiro/2, valida_sexo/2]).
+
+sexo("F").
+sexo("f").
+sexo("M").
+sexo("m").
+
+valida_sexo(Label, Retorno) :-
+	write(Label),
+	read_line_to_string(user_input, Sexo),
+	(sexo(Sexo) -> Retorno is Sexo);
+	(writeln("Entrada Inválida! Tente Novamente. q´• ʖ̯ •`p \n"),
+	valida_sexo(Label, Retorno)).
+
+valida_inteiro(Label, Retorno) :-
+	write(Label),
+	read_int(Entrada),
+	((integer(Entrada); float(Entrada)) -> Retorno is Entrada);
+	(writeln("Entrada Inválida! Tente Novamente. q´• ʖ̯ •`p \n"),
+	valida_inteiro(Label, Retorno)).
 
 %! Captura data atual
 getTimeValue(Key, Value):-
